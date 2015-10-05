@@ -1,7 +1,11 @@
 package com.ms.square.android.etsyblurdemo;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,9 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
+import android.renderscript.ScriptIntrinsicBlur;
 
 import com.ms.square.android.R;
+import com.ms.square.android.com.saadahmad.smarthome.BlurBuilder;
 import com.ms.square.android.com.saadahmad.smarthome.SetTemp;
 
 
@@ -132,10 +139,31 @@ public class MainActivity extends AppCompatActivity
         public PlaceholderFragment() {
         }
 
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)//Is this correct???
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            ///////add in blur container
+
+
+            final Activity activity = getActivity();
+            final View content = activity.findViewById(android.R.id.content).getRootView();
+
+            if (content.getWidth() > 0) {
+                Bitmap image = BlurBuilder.blur(content);
+                rootView.setBackground(new BitmapDrawable(activity.getResources(), image));//Use rootview here? is this the correct function to call?
+            } else {
+                content.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        Bitmap image = BlurBuilder.blur(content);
+                        rootView.setBackground(new BitmapDrawable(activity.getResources(), image));
+                    }
+                });
+            }
+
+
             return rootView;
         }
 

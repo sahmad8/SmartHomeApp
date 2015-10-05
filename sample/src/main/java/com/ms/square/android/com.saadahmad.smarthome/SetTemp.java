@@ -43,7 +43,7 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.activity_set_temp);
         np = (NumberPicker) findViewById(R.id.numberPicker);
         btn = (Button) findViewById(R.id.button1);
-        np.setMaxValue(76);
+        np.setMaxValue(78);
         np.setMinValue(75);
         btn.setOnClickListener(this);
         np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
