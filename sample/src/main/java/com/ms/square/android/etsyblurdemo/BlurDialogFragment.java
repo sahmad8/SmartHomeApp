@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.ms.square.android.R;
 import com.ms.square.android.etsyblur.BlurDialogFragmentHelper;
 
 /**
@@ -59,11 +60,7 @@ public class BlurDialogFragment extends DialogFragment {
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
                 new String[]{
-                        "Enable History",
-                        "Clear History",
-                        "Search History",
-                        "Select Currency",
-                        "About"
+                        "Home Status Settings"
                 }
         ));
         return v;

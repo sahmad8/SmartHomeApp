@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">EtsyBlur Demo</string>
-    <string name="title_section1">Activity Feed</string>
-    <string name="title_section2">Categories</string>
-    <string name="title_section3">Settings</string>
+    <string name="app_name">Smart Home Demo</string>
+    <string name="title_section1">Video Monitoring</string>
+    <string name="title_section2">Thermostat</string>
+    <string name="title_section3">Lock</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_dialog">Open Dialog</string>
+    <string name="action_dialog">Status</string>
 
 </resources>

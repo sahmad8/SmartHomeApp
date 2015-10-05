@@ -16,7 +16,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
-                android:src="@drawable/lolipop_bg"/>
+                android:src="@drawable/background_jeremy"
+                android:alpha="1"/>
         </FrameLayout>
     </ScrollView>
 

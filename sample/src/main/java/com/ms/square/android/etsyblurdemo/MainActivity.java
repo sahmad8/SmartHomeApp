@@ -1,6 +1,7 @@
 package com.ms.square.android.etsyblurdemo;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.ms.square.android.R;
+import com.ms.square.android.com.saadahmad.smarthome.SetTemp;
 
 
 public class MainActivity extends AppCompatActivity
@@ -45,6 +50,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+        Toast.makeText(MainActivity.this, ""+position, Toast.LENGTH_SHORT).show();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
@@ -58,6 +64,8 @@ public class MainActivity extends AppCompatActivity
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
+                final Intent intent=new Intent(getBaseContext(), SetTemp.class);
+                startActivity(intent);
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
@@ -68,7 +76,7 @@ public class MainActivity extends AppCompatActivity
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+       // actionBar.setTitle(mTitle);
     }
 
 
@@ -136,6 +144,7 @@ public class MainActivity extends AppCompatActivity
             super.onAttach(activity);
             ((MainActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
+            //intent.putExtra("Temperature", 76);
         }
     }
 
