@@ -49,7 +49,7 @@ import java.net.URL;
  */
 public class Authenticate extends ActionBarActivity implements View.OnClickListener {
 
-    private final String password = "xilinx";
+    private final String password = "";
     private EditText value;
     private Button btn;
     private ProgressBar pb;
@@ -119,9 +119,9 @@ public class Authenticate extends ActionBarActivity implements View.OnClickListe
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Toast.makeText(this, "Welcome", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Welcome", Toast.LENGTH_LONG).show();
             final Intent intent=new Intent(getBaseContext(), MainActivity.class);
-            intent.putExtra("Json_String", myresult);
+            intent.putExtra("nestData", myresult);
             startActivity(intent);
             //imageView.setImageBitmap(bmp);
         }

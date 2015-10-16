@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ms.square.android.R;
@@ -19,6 +20,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,12 +38,14 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
     Integer setting=75;
     private Button btn;
     private String myresult= null;
+    private JSONObject nestData;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_temp);
+
         np = (NumberPicker) findViewById(R.id.numberPicker);
         btn = (Button) findViewById(R.id.button1);
         np.setMaxValue(78);
@@ -52,6 +57,26 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
            setting=newVal;
         }
     });
+        //Bundle b =  getIntent().getExtras();
+        Intent intent= getIntent();
+        StringBuilder display = new StringBuilder();
+
+        try {
+            nestData = new JSONObject(intent.getStringExtra("nestData"));
+            Toast.makeText(this, "The target is "+ nestData.getString("target") , Toast.LENGTH_LONG).show();
+            display.append("Current Temperature: ");
+            display.append(nestData.getString("temperature") + "\n");
+            display.append("Target Temperature: ");
+            display.append(nestData.getString("target") + "\n");
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
+
+        dataDisplay.setText(display.toString());
+
+
     }
 
 
@@ -60,6 +85,7 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
         new NestSetAsyncTask().execute(setting.toString());
         Toast.makeText(this, "Set Temperature to "+setting, Toast.LENGTH_LONG).show();
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
+        intent.putExtra("nestData", nestData.toString());
         startActivity(intent);
     }
 

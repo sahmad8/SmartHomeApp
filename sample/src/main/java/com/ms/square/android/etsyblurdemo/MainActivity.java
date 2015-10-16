@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent= getIntent();
-        json_String=intent.getStringExtra("Json_String");
+        json_String=intent.getStringExtra("nestData");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity
             case 2:
                 mTitle = getString(R.string.title_section2);
                 final Intent intent=new Intent(getBaseContext(), SetTemp.class);
+                intent.putExtra("nestData", json_String);
                 startActivity(intent);
                 break;
             case 3:
