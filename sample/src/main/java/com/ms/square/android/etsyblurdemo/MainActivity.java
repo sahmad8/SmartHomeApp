@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
             }
 
         };
-        timer.schedule(doAsynchronousTask, 0, 5000); //execute in every 50000 ms
+        timer.schedule(doAsynchronousTask, 0, 50000); //execute in every 50000 ms
     }
 
     @Override
