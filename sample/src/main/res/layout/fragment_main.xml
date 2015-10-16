@@ -16,8 +16,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
-                android:src="@drawable/background_jeremy"
-                android:alpha="1"/>
+                android:src="@drawable/background_jeremy"/>
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Away Mode"
+                android:textColor="@color/bg_drawer"
+                android:id="@+id/switch1"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Small Text"
+                android:textColor="@color/bg_drawer"
+                android:id="@+id/text_Nest"
+                android:layout_gravity="left|top" />
         </FrameLayout>
     </ScrollView>
 

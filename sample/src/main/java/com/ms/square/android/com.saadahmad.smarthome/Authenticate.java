@@ -1,8 +1,6 @@
 package com.ms.square.android.com.saadahmad.smarthome;
 
-/**
- * Created by Saad Ahmad on 9/30/2015.
- */
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,20 +31,24 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
  * Created by Saad Ahmad on 8/28/2015.
+ * Authenticate class
+ * After valid password entry, performs ASNYC TASK of getting thermostat info.
+ * Then starts MainActivity after recieving info.
  */
 public class Authenticate extends ActionBarActivity implements View.OnClickListener {
 
-    /**
-     * Variables which relate to xml of activity
-     */
     private final String password = "xilinx";
     private EditText value;
     private Button btn;
@@ -55,7 +57,9 @@ public class Authenticate extends ActionBarActivity implements View.OnClickListe
     public String myresult=null;
     private ImageView imageView;
     private Bitmap bmp=null;
-    /**
+
+
+    /**onCreate Method
      * Initializes the Activity values and creates the text field and button.
      * Recieves intent from game test activity (thescore)
      *
@@ -78,22 +82,12 @@ public class Authenticate extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_starter, menu);
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        //int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        //if (id == R.id.action_settings) {               //giving an error when imported from my original app.
-           // return true;
-        //}
 
         return super.onOptionsItemSelected(item);
     }
@@ -106,28 +100,30 @@ public class Authenticate extends ActionBarActivity implements View.OnClickListe
      */
     public void onClick(View view) {
         // TODO Auto-generated method stub
-        if (!value.getText().toString().equals(password)) {                                                 //atleast 1 character
-            // out of range
+        if (!value.getText().toString().equals(password)) {
             Toast.makeText(this, "Incorrect password", Toast.LENGTH_LONG).show();
-        } else {
+        }
+        else
+        {
             pb.setVisibility(View.VISIBLE);
-            //Toast.makeText(this, "Welcome", Toast.LENGTH_LONG).show();
-            //new MyAsyncTask().execute(value.getText().toString());                 //commented out since we dont have a getTemp method setup on server
-            //new NestSetAsyncTask().execute(value.getText().toString());
-            myresult="Something just for now until we get getNest setup";
+            new MyAsyncTask().execute(value.getText().toString());                 //commented out since we dont have a getTemp method setup on server
             while (myresult==null){
 
             }
+            //myresult now has json string. BTW, i just passed the json string instead of objject to the next activity
+            //just use the same method as below to extract info from the string using json object class.
+            JSONObject json= null;
+            try {
+                json = new JSONObject(myresult);
+                Toast.makeText(this, json.getString("temperature"), Toast.LENGTH_LONG).show();  //for debugging, js toast the temp.
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             Toast.makeText(this, "Welcome", Toast.LENGTH_LONG).show();
             final Intent intent=new Intent(getBaseContext(), MainActivity.class);
-
-            //intent.putExtra("Temperature", 76);
+            intent.putExtra("Json_String", myresult);
             startActivity(intent);
             //imageView.setImageBitmap(bmp);
-
-
-            //setContentView(imageView);
-
         }
     }
 
@@ -172,42 +168,45 @@ public class Authenticate extends ActionBarActivity implements View.OnClickListe
          */
         public String postData(String valueIWantToSend) {
             // Create new HttpClient and HTTPPOST
-
+/*   This commented code returns an image stored on the server.
             try {
-                InputStream in = new URL("http://128.83.190.58/test.py/showimage").openStream();
+                InputStream in = new URL("http://128.83.190.58/test.py/nestGet").openStream();
                 bmp = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
                 Log.e(null, "caught exception");
                 // log error
             }
-
             myresult="GOT IT";
             return null;
-
-/*
-
-
+*/
+            InputStream inputStream = null;
+            StringBuilder builder=new StringBuilder();
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://128.83.190.58/test.py/nestSet?temperature=76");     //this is the url of our post servlet for our web application
+            HttpPost httppost = new HttpPost("http://128.83.190.58/test.py/nestGet");     //this is the url of our post servlet for our web application
             try {
                 String paramstring="test hope this works";
-                //httppost.addHeader("paramstring", paramstring);
                 response = httpclient.execute(httppost);           //currently, no response is returned by webiste
                 HttpEntity entity = response.getEntity();
                 if(entity != null) {
-                    myresult=EntityUtils.toString(entity);
-                    return EntityUtils.toString(entity);
+                    HttpEntity entity2 = response.getEntity();
+                    InputStream content = entity2.getContent();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+                    String line;
+                    while((line = reader.readLine()) != null){
+                        builder.append(line);
+                    }
+                    myresult=builder.toString();
                 }
-                //finish();                                                       //done, our webapp will use the identifiers to get the score.
             } catch (ClientProtocolException e) {
-
+                Log.e(null, "caught exception:CLIENT PROTO..");  //log for debugging in Android studio console.
             }
             catch (IOException e) {
+                Log.e(null, "caught exception:IO EXCEP..");
             }
             catch (RuntimeException e) {
-
+                Log.e(null, "caught exception:RUNTIME EXCEP...");
             }
-            return "no string";*/
+            return builder.toString();
         }
     }
 
