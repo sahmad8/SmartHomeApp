@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity
     public String json_String= null;
     public String test=null;
     private JSONObject nestData;
+    private Intent intent = null;
     Switch away_switch=null;
 
 
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Intent intent= getIntent();
+        intent= getIntent();
         json_String=intent.getStringExtra("nestData");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         //Toast.makeText(this, json_String, Toast.LENGTH_LONG).show();
         final Handler handler = new Handler();
+        final PerformBackgroundTask performBackgroundTask = new PerformBackgroundTask();
         Timer timer = new Timer();
         TimerTask doAsynchronousTask = new TimerTask() {
             @Override
@@ -92,7 +94,7 @@ public class MainActivity extends AppCompatActivity
                 handler.post(new Runnable() {
                     public void run() {
                         try {
-                            PerformBackgroundTask performBackgroundTask = new PerformBackgroundTask();
+                            updateDisplayData(intent);
                             // PerformBackgroundTask this class is the class that extends AsynchTask
                             performBackgroundTask.execute("dont matter");
                         } catch (Exception e) {
@@ -108,22 +110,7 @@ public class MainActivity extends AppCompatActivity
 
         };
 
-        StringBuilder display = new StringBuilder();
 
-        try {
-            nestData = new JSONObject(intent.getStringExtra("nestData"));
-            Toast.makeText(this, "The target is "+ nestData.getString("target") , Toast.LENGTH_LONG).show();
-            display.append("Current Temperature: ");
-            display.append(nestData.getString("temperature") + "\n");
-            display.append("Target Temperature: ");
-            display.append(nestData.getString("target") + "\n");
-
-        }catch (JSONException e) {
-            e.printStackTrace();
-        }
-        TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
-
-        dataDisplay.setText(display.toString());
         timer.schedule(doAsynchronousTask, 0, 50000); //execute in every 50000 ms
     }
 
@@ -241,15 +228,64 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Asynchornous subclass, MyAsyncTask
-     * extends asynchronouse task
-     * overrides background method and execuutes http actions
+     * extends asynchronous task
+     * overrides background method and executes http actions
      */
+    private void updateDisplayData(Intent intent){
+            StringBuilder builder=new StringBuilder();
+            HttpResponse response=null;
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/nestGet");     //this is the url of our post servlet for our web application
+            try {
+                response = httpclient.execute(httppost);           //currently, no response is returned by webiste
+                HttpEntity entity = response.getEntity();
+                if(entity != null) {
+                    HttpEntity entity2 = response.getEntity();
+                    InputStream content = entity2.getContent();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+                    String line;
+                    while((line = reader.readLine()) != null){
+                        builder.append(line);
+                    }
+                    json_String=builder.toString();
+                }
+            } catch (ClientProtocolException e) {
+                Log.e(null, "caught exception:CLIENT PROTO..");  //log for debugging in Android studio console.
+            }
+            catch (IOException e) {
+                Log.e(null, "caught exception:IO EXCEP..");
+            }
+            catch (RuntimeException e) {
+                Log.e(null, "caught exception:RUNTIME EXCEP...");
+            }
+            StringBuilder display = new StringBuilder();
+
+            try {
+                nestData = new JSONObject(json_String);
+                display.append("Current Temperature: ");
+                display.append(nestData.getString("temperature") + "\n");
+                display.append("Target Temperature: ");
+                display.append(nestData.getString("target") + "\n");
+                System.out.println(nestData.getString("target"));
+
+            }catch (JSONException e) {
+                e.printStackTrace();
+            }
+            TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
+
+            dataDisplay.setText(display.toString());
+            System.out.println("HELLLLLLLOOOOOOO");
+
+
+    }
+
     private class PerformBackgroundTask extends AsyncTask<String, Integer, Double> {
 
         @Override
         protected Double doInBackground(String... params) {
             // TODO Auto-generated method stub
             final String returned=postData(params[0]);
+
             return null;
         }
 
@@ -291,6 +327,9 @@ public class MainActivity extends AppCompatActivity
             myresult="GOT IT";
             return null;
 */
+
+
+
             InputStream inputStream = null;
             StringBuilder builder=new StringBuilder();
             HttpResponse response=null;
@@ -319,6 +358,22 @@ public class MainActivity extends AppCompatActivity
             catch (RuntimeException e) {
                 Log.e(null, "caught exception:RUNTIME EXCEP...");
             }
+            StringBuilder display = new StringBuilder();
+
+            try {
+                nestData = new JSONObject(json_String);
+                display.append("Current Temperature: ");
+                display.append(nestData.getString("temperature") + "\n");
+                display.append("Target Temperature: ");
+                display.append(nestData.getString("target") + "\n");
+
+            }catch (JSONException e) {
+                e.printStackTrace();
+            }
+            TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
+
+            dataDisplay.setText(display.toString());
+
             return builder.toString();
         }
     }

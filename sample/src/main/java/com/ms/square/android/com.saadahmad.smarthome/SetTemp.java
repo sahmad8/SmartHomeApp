@@ -16,6 +16,7 @@ import com.ms.square.android.R;
 import com.ms.square.android.etsyblurdemo.MainActivity;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -23,8 +24,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 
 /**
@@ -39,6 +42,7 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
     private Button btn;
     private String myresult= null;
     private JSONObject nestData;
+    HttpResponse response;
 
 
     @Override
@@ -84,6 +88,34 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         new NestSetAsyncTask().execute(setting.toString());
         Toast.makeText(this, "Set Temperature to "+setting, Toast.LENGTH_LONG).show();
+
+//        StringBuilder builder=new StringBuilder();
+//        HttpClient httpclient = new DefaultHttpClient();
+//        HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/nestSet?temperature=" + setting.toString());     //this is the url of our post servlet for our web application
+//        try {
+//            String paramstring="test hope this works";
+//            response = httpclient.execute(httppost);           //currently, no response is returned by webiste
+//            HttpEntity entity = response.getEntity();
+//            if(entity != null) {
+//                HttpEntity entity2 = response.getEntity();
+//                InputStream content = entity2.getContent();
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+//                String line;
+//                while((line = reader.readLine()) != null){
+//                    builder.append(line);
+//                }
+//                myresult=builder.toString();
+//            }
+//        } catch (ClientProtocolException e) {
+//            Log.e(null, "caught exception:CLIENT PROTO..");  //log for debugging in Android studio console.
+//        }
+//        catch (IOException e) {
+//            Log.e(null, "caught exception:IO EXCEP..");
+//        }
+//        catch (RuntimeException e) {
+//            Log.e(null, "caught exception:RUNTIME EXCEP...");
+//        }
+
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("nestData", nestData.toString());
         startActivity(intent);
