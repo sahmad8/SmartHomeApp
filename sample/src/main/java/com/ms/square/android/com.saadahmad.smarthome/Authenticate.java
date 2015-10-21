@@ -182,7 +182,7 @@ public class Authenticate extends ActionBarActivity implements View.OnClickListe
             InputStream inputStream = null;
             StringBuilder builder=new StringBuilder();
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://128.83.190.58/test.py/nestGet");     //this is the url of our post servlet for our web application
+            HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/nestGet");     //this is the url of our post servlet for our web application
             try {
                 String paramstring="test hope this works";
                 response = httpclient.execute(httppost);           //currently, no response is returned by webiste

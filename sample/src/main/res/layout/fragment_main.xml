@@ -34,6 +34,7 @@
                 android:textColor="@color/bg_drawer"
                 android:id="@+id/text_Nest"
                 android:layout_gravity="left|top" />
+
         </FrameLayout>
     </ScrollView>
 

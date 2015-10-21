@@ -40,6 +40,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity
 
     public String json_String= null;
     public String test=null;
+    private JSONObject nestData;
     Switch away_switch=null;
 
 
@@ -104,6 +107,23 @@ public class MainActivity extends AppCompatActivity
             }
 
         };
+
+//        StringBuilder display = new StringBuilder();
+//
+//        try {
+//            nestData = new JSONObject(intent.getStringExtra("nestData"));
+//            Toast.makeText(this, "The target is "+ nestData.getString("target") , Toast.LENGTH_LONG).show();
+//            display.append("Current Temperature: ");
+//            display.append(nestData.getString("temperature") + "\n");
+//            display.append("Target Temperature: ");
+//            display.append(nestData.getString("target") + "\n");
+//
+//        }catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        TextView dataDisplay = (TextView) findViewById(R.id.text_Nest);
+//
+//        dataDisplay.setText(display.toString());
         timer.schedule(doAsynchronousTask, 0, 50000); //execute in every 50000 ms
     }
 
@@ -262,7 +282,7 @@ public class MainActivity extends AppCompatActivity
             // Create new HttpClient and HTTPPOST
 /*   This commented code returns an image stored on the server.
             try {
-                InputStream in = new URL("http://128.83.190.58/test.py/nestGet").openStream();
+                InputStream in = new URL("http://128.83.52.253:8079/test.py/nestGet").openStream();
                 bmp = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
                 Log.e(null, "caught exception");
@@ -275,7 +295,7 @@ public class MainActivity extends AppCompatActivity
             StringBuilder builder=new StringBuilder();
             HttpResponse response=null;
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://128.83.190.58/test.py/nestGet");     //this is the url of our post servlet for our web application
+            HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/nestGet");     //this is the url of our post servlet for our web application
             try {
                 String paramstring="test hope this works";
                 response = httpclient.execute(httppost);           //currently, no response is returned by webiste
