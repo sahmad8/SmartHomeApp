@@ -108,22 +108,22 @@ public class MainActivity extends AppCompatActivity
 
         };
 
-//        StringBuilder display = new StringBuilder();
-//
-//        try {
-//            nestData = new JSONObject(intent.getStringExtra("nestData"));
-//            Toast.makeText(this, "The target is "+ nestData.getString("target") , Toast.LENGTH_LONG).show();
-//            display.append("Current Temperature: ");
-//            display.append(nestData.getString("temperature") + "\n");
-//            display.append("Target Temperature: ");
-//            display.append(nestData.getString("target") + "\n");
-//
-//        }catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        TextView dataDisplay = (TextView) findViewById(R.id.text_Nest);
-//
-//        dataDisplay.setText(display.toString());
+        StringBuilder display = new StringBuilder();
+
+        try {
+            nestData = new JSONObject(intent.getStringExtra("nestData"));
+            Toast.makeText(this, "The target is "+ nestData.getString("target") , Toast.LENGTH_LONG).show();
+            display.append("Current Temperature: ");
+            display.append(nestData.getString("temperature") + "\n");
+            display.append("Target Temperature: ");
+            display.append(nestData.getString("target") + "\n");
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
+
+        dataDisplay.setText(display.toString());
         timer.schedule(doAsynchronousTask, 0, 50000); //execute in every 50000 ms
     }
 
