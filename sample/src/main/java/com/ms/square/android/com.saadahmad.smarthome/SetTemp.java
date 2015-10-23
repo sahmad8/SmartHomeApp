@@ -40,8 +40,11 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
     NumberPicker np;
     Integer setting=75;
     private Button btn;
+    private int maxTemp = 90;
+    private int minTemp = 50;
     private String myresult= null;
     private JSONObject nestData;
+    private int targetTemperature = 75;
     HttpResponse response;
 
 
@@ -52,8 +55,8 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
 
         np = (NumberPicker) findViewById(R.id.numberPicker);
         btn = (Button) findViewById(R.id.button1);
-        np.setMaxValue(78);
-        np.setMinValue(75);
+        np.setMaxValue(maxTemp);
+        np.setMinValue(minTemp);
         btn.setOnClickListener(this);
         np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
         @Override
@@ -71,7 +74,11 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
             display.append("Current Temperature: ");
             display.append(nestData.getString("temperature") + "\n");
             display.append("Target Temperature: ");
-            display.append(nestData.getString("target") + "\n");
+
+            double targetTemp = Double.parseDouble(nestData.getString("target"));
+            targetTemperature  = (int)targetTemp;
+            display.append(targetTemperature + "\n");
+            np.setValue(targetTemperature);
 
         }catch (JSONException e) {
             e.printStackTrace();
@@ -82,12 +89,24 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
 
 
     }
-
+    public void increaseTemp(View v){
+        if(targetTemperature < 90) {
+            targetTemperature++;
+            np.setValue(targetTemperature);
+        }
+    }
+    public void decreaseTemp(View v){
+        if(targetTemperature > 50) {
+            targetTemperature--;
+            np.setValue(targetTemperature);
+        }
+    }
 
     @Override
     public void onClick(View v) {
-        new NestSetAsyncTask().execute(setting.toString());
-        Toast.makeText(this, "Set Temperature to "+setting, Toast.LENGTH_LONG).show();
+
+        new NestSetAsyncTask().execute(Integer.toString(np.getValue()));
+        Toast.makeText(this, "Set Temperature to "+ np.getValue(), Toast.LENGTH_LONG).show();
 
 //        StringBuilder builder=new StringBuilder();
 //        HttpClient httpclient = new DefaultHttpClient();

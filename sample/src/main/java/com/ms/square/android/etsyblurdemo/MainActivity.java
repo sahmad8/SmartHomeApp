@@ -54,7 +54,7 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, View.OnClickListener {
 
-
+    private int targetTemperature = 75;
     public String json_String= null;
     public String test=null;
     private JSONObject nestData;
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity
                 handler.post(new Runnable() {
                     public void run() {
                         try {
-                            updateDisplayData(intent);
+                            //updateDisplayData(intent);
                             // PerformBackgroundTask this class is the class that extends AsynchTask
                             performBackgroundTask.execute("dont matter");
                         } catch (Exception e) {
@@ -236,12 +236,12 @@ public class MainActivity extends AppCompatActivity
             HttpResponse response=null;
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/nestGet");     //this is the url of our post servlet for our web application
+
             try {
                 response = httpclient.execute(httppost);           //currently, no response is returned by webiste
                 HttpEntity entity = response.getEntity();
                 if(entity != null) {
-                    HttpEntity entity2 = response.getEntity();
-                    InputStream content = entity2.getContent();
+                    InputStream content = entity.getContent();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(content));
                     String line;
                     while((line = reader.readLine()) != null){
@@ -267,13 +267,14 @@ public class MainActivity extends AppCompatActivity
                 display.append("Target Temperature: ");
                 display.append(nestData.getString("target") + "\n");
                 System.out.println(nestData.getString("target"));
-
+                targetTemperature = Integer.parseInt(nestData.getString("target"));
             }catch (JSONException e) {
                 e.printStackTrace();
             }
             TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
 
             dataDisplay.setText(display.toString());
+
             System.out.println("HELLLLLLLOOOOOOO");
 
 
@@ -359,17 +360,21 @@ public class MainActivity extends AppCompatActivity
                 Log.e(null, "caught exception:RUNTIME EXCEP...");
             }
             StringBuilder display = new StringBuilder();
-
             try {
                 nestData = new JSONObject(json_String);
                 display.append("Current Temperature: ");
                 display.append(nestData.getString("temperature") + "\n");
                 display.append("Target Temperature: ");
-                display.append(nestData.getString("target") + "\n");
 
+                double targetTemp = Double.parseDouble(nestData.getString("target"));
+                targetTemperature = (int)targetTemp;
+                display.append(targetTemperature + "\n");
             }catch (JSONException e) {
                 e.printStackTrace();
             }
+
+
+
             TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
 
             dataDisplay.setText(display.toString());

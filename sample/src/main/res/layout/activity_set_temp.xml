@@ -17,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_below="@+id/dataDisplay"
         android:id="@+id/numberPicker" />
     <Button
         android:id="@+id/button1"
@@ -25,5 +26,24 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="Return" />
+    <ImageButton
+        android:id="@+id/buttonUp"
+        android:layout_below="@+id/dataDisplay"
+        android:src="@drawable/plus_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:onClick="increaseTemp"
+        android:text="+" />
+
+    <ImageButton
+        android:id="@+id/buttonDown"
+        android:layout_below="@+id/dataDisplay"
+        android:src="@drawable/minus_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:onClick="decreaseTemp"
+        android:text="-" />
 
 </RelativeLayout>
