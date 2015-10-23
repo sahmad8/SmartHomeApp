@@ -20,11 +20,22 @@
         android:layout_below="@+id/dataDisplay"
         android:id="@+id/numberPicker" />
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/set"
         android:layout_below="@+id/numberPicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_centerHorizontal="true"
+        android:onClick="setTemp"
+        android:text="Set" />
+    <Button
+        android:id="@+id/returnToMain"
+        android:layout_below="@+id/numberPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="returnToMain"
         android:text="Return" />
     <ImageButton
         android:id="@+id/buttonUp"
@@ -45,5 +56,14 @@
         android:layout_alignParentRight="true"
         android:onClick="decreaseTemp"
         android:text="-" />
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Away Mode"
+        android:textColor="@color/bg_drawer"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/awayMode"
+        android:layout_below="@+id/set"
+        android:layout_gravity="center" />
 
 </RelativeLayout>

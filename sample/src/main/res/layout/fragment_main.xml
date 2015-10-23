@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:text="Away Mode"
                 android:textColor="@color/bg_drawer"
-                android:id="@+id/switch1"
+                android:id="@+id/awayMode"
                 android:layout_gravity="center" />
 
             <TextView

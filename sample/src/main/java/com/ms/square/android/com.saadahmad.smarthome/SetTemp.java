@@ -8,9 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.NumberPicker;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.ms.square.android.R;
 import com.ms.square.android.etsyblurdemo.MainActivity;
@@ -36,7 +39,7 @@ import java.net.URL;
  * Works by calling NestAsyncTask and passing an integer to it
  * That will set the target temp on nest thermostat
  */
-public class SetTemp extends AppCompatActivity implements View.OnClickListener {
+public class SetTemp extends AppCompatActivity  {
     NumberPicker np;
     Integer setting=75;
     private Button btn;
@@ -48,6 +51,7 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
     HttpResponse response;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +61,7 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
         btn = (Button) findViewById(R.id.button1);
         np.setMaxValue(maxTemp);
         np.setMinValue(minTemp);
-        btn.setOnClickListener(this);
+        //btn.setOnClickListener(this);
         np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
         @Override
         public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -87,8 +91,21 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
 
         dataDisplay.setText(display.toString());
 
+        Switch awayModeSwitch = (Switch)  findViewById(R.id.awayMode);
+        awayModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                System.out.println("CHANGEDDDD");
+            }
+
+        });
+
 
     }
+
+
+
     public void increaseTemp(View v){
         if(targetTemperature < 90) {
             targetTemperature++;
@@ -102,8 +119,7 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    @Override
-    public void onClick(View v) {
+    public void setTemp(View v) {
 
         new NestSetAsyncTask().execute(Integer.toString(np.getValue()));
         Toast.makeText(this, "Set Temperature to "+ np.getValue(), Toast.LENGTH_LONG).show();
@@ -135,6 +151,9 @@ public class SetTemp extends AppCompatActivity implements View.OnClickListener {
 //            Log.e(null, "caught exception:RUNTIME EXCEP...");
 //        }
 
+
+    }
+    public void returnToMain(View v){
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("nestData", nestData.toString());
         startActivity(intent);
