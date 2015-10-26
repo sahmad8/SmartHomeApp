@@ -25,20 +25,18 @@ import java.net.URL;
  * Class for setting Nest temperature. Just pass the integer value and call
  * execute on this class (look at SetTemp class)
  */
-public class NestSetAsyncTask extends AsyncTask<String, Integer, Double> {
+public class NestAwayAsyncTask extends AsyncTask<String, Integer, Double> {
 
     boolean success=false;
     private ProgressBar pb;
     HttpResponse response;
     public String myresult=null;
-    public Integer temp_requested=null;
     private ImageView imageView;
 
 
     @Override
     protected Double doInBackground(String... params) {
         // TODO Auto-generated method stub
-        temp_requested=Integer.parseInt(params[0]);
         final String returned=postData(params[0]);
         return null;
     }
@@ -71,24 +69,27 @@ public class NestSetAsyncTask extends AsyncTask<String, Integer, Double> {
     public String postData(String valueIWantToSend) {
         // Create new HttpClient and HTTPPOST
 
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/nestSet?temperature="+valueIWantToSend);     //this is the url of our post servlet for our web application
-            try {
-                String paramstring="test hope this works";
-                response = httpclient.execute(httppost);           //currently, no response is returned by webiste
-                HttpEntity entity = response.getEntity();
-                if(entity != null) {
-                    myresult = EntityUtils.toString(entity);
-                    return EntityUtils.toString(entity);
-                }
-            } catch (ClientProtocolException e) {
+        HttpClient httpclient = new DefaultHttpClient();
+        System.out.println("__________________________");
+        System.out.println(valueIWantToSend);
 
+        HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/nestAway?mode="+valueIWantToSend);     //this is the url of our post servlet for our web application
+        try {
+            String paramstring="test hope this works";
+            response = httpclient.execute(httppost);           //currently, no response is returned by webiste
+            HttpEntity entity = response.getEntity();
+            if(entity != null) {
+                myresult = EntityUtils.toString(entity);
+                return EntityUtils.toString(entity);
             }
-            catch (IOException e) {
-            }
-            catch (RuntimeException e) {
+        } catch (ClientProtocolException e) {
 
-            }
+        }
+        catch (IOException e) {
+        }
+        catch (RuntimeException e) {
+
+        }
         return "no string";
     }
 }
