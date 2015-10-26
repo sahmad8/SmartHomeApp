@@ -12,7 +12,8 @@
     <FrameLayout
         android:id="@id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+    </FrameLayout>
 
     <!-- needed w/this id for EtsyLib to work -->
     <ImageView
@@ -25,6 +26,7 @@
     <TextView
         android:id="@+id/dataDisplay"
         android:textSize="20dp"
+        android:textColor="@color/bg_drawer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

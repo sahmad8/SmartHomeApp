@@ -1,17 +1,11 @@
 package com.ms.square.android.etsyblurdemo;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.renderscript.Allocation;
-import android.renderscript.RenderScript;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -23,30 +17,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.renderscript.ScriptIntrinsicBlur;
 
 import com.ms.square.android.R;
-import com.ms.square.android.com.saadahmad.smarthome.BlurBuilder;
+import com.ms.square.android.com.saadahmad.smarthome.AwayActivity;
+import com.ms.square.android.com.saadahmad.smarthome.Intruder;
 import com.ms.square.android.com.saadahmad.smarthome.SetTemp;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -55,10 +40,10 @@ public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, View.OnClickListener {
 
 
-    public String json_String= null;
     public String test=null;
     private JSONObject nestData;
-    Switch away_switch=null;
+    Timer timer=null;
+    private boolean away_mode=false;
 
 
     /**
@@ -69,44 +54,21 @@ public class MainActivity extends AppCompatActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    public Activity myActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent= getIntent();
-        json_String=intent.getStringExtra("nestData");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
+        this.myActivity=this;
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-        //Toast.makeText(this, json_String, Toast.LENGTH_LONG).show();
-        final Handler handler = new Handler();
-        Timer timer = new Timer();
-        TimerTask doAsynchronousTask = new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            PerformBackgroundTask performBackgroundTask = new PerformBackgroundTask();
-                            // PerformBackgroundTask this class is the class that extends AsynchTask
-                            performBackgroundTask.execute("dont matter");
-                        } catch (Exception e) {
-                            // TODO Auto-generated catch block
-                        }
-                        while(test==null){
-
-                        }
-                        System.out.println("AJBDA"+test);
-                    }
-                });
-            }
-
-        };
 
         StringBuilder display = new StringBuilder();
 
@@ -116,15 +78,42 @@ public class MainActivity extends AppCompatActivity
             display.append("Current Temperature: ");
             display.append(nestData.getString("temperature") + "\n");
             display.append("Target Temperature: ");
-            display.append(nestData.getString("target") + "\n");
-
+            display.append(nestData.getString("target") + "\n\n");
+            display.append("Away status: "+nestData.getString("away"));
+            away_mode=nestData.getBoolean("away");
         }catch (JSONException e) {
             e.printStackTrace();
         }
         TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
-
         dataDisplay.setText(display.toString());
-        timer.schedule(doAsynchronousTask, 0, 50000); //execute in every 50000 ms
+        if (away_mode) {
+            final Handler handler = new Handler();
+            timer = new Timer();
+            TimerTask doAsynchronousTask = new TimerTask() {
+                @Override
+                public void run() {
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            try {
+                                PerformBackgroundTask performBackgroundTask = new PerformBackgroundTask(myActivity);
+                                // PerformBackgroundTask this class is the class that extends AsynchTask
+                                performBackgroundTask.execute("dont matter");
+                            } catch (Exception e) {
+                                // TODO Auto-generated catch block
+                            }
+
+                            System.out.println("AJBDA" + test);
+                            handler.removeCallbacks(this);
+                        }
+                    }, 9000);
+                    final Intent intenter = new Intent();
+                    System.out.println("GETHEREEVERYtIME:::!");
+                }
+
+            };
+            System.out.println("About to schedule\n");
+            timer.schedule(doAsynchronousTask, 0, 20000); //execute in every 50000 ms
+        }
     }
 
     @Override
@@ -144,12 +133,22 @@ public class MainActivity extends AppCompatActivity
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
-                final Intent intent=new Intent(getBaseContext(), SetTemp.class);
-                intent.putExtra("nestData", json_String);
+                Intent intent=new Intent(this, SetTemp.class);
+                if (timer!=null) {
+                    timer.cancel();
+                    timer = null;
+                }
+                intent.putExtra("nestData", nestData.toString());
                 startActivity(intent);
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
+                break;
+            case 4:
+                mTitle="Away/Home";
+                Intent away_intent=new Intent(this, AwayActivity.class);
+                away_intent.putExtra("nestData", nestData.toString());
+                startActivity(away_intent);
                 break;
         }
     }
@@ -192,6 +191,7 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View v) {
 
     }
+
 
     /**
      * A placeholder fragment containing a simple view.
@@ -246,6 +246,13 @@ public class MainActivity extends AppCompatActivity
      */
     private class PerformBackgroundTask extends AsyncTask<String, Integer, Double> {
 
+        private Activity activity=null;
+
+        public PerformBackgroundTask (Activity activity)
+        {
+            this.activity=activity;
+        }
+
         @Override
         protected Double doInBackground(String... params) {
             // TODO Auto-generated method stub
@@ -255,7 +262,7 @@ public class MainActivity extends AppCompatActivity
 
         /**
          * onPosttExecute-displays toast upon http execute completion
-         * exits application
+         * we can exit application here if something goes wrong.
          * @param result
          */
         protected void onPostExecute(Void result){
@@ -275,22 +282,26 @@ public class MainActivity extends AppCompatActivity
         /**
          * poData-handles http actions
          * called when user clicks submit-then asynchronous task is created and calls this method
-         * Uses http address of our servlet code for onPost (for our webapplciation which holds all the scores)
+         * Uses http address with IP address of apache running on the board, along with pron #
          * @param valueIWantToSend
          */
         public String postData(String valueIWantToSend) {
-            // Create new HttpClient and HTTPPOST
-/*   This commented code returns an image stored on the server.
+//  This code returns an image stored on the server.
             try {
-                InputStream in = new URL("http://128.83.52.253:8079/test.py/nestGet").openStream();
-                bmp = BitmapFactory.decodeStream(in);
+                InputStream in = new URL("http://128.83.52.253:8079/imagetest.py/showImage").openStream();
+                //bmp = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
                 Log.e(null, "caught exception");
+                test="Exception";
+                return null;
                 // log error
             }
-            myresult="GOT IT";
+            test="GOT IT";
+            timer.cancel();
+            activity.startActivity(new Intent(activity.getBaseContext(), Intruder.class));
             return null;
-*/
+
+            /*
             InputStream inputStream = null;
             StringBuilder builder=new StringBuilder();
             HttpResponse response=null;
@@ -319,7 +330,7 @@ public class MainActivity extends AppCompatActivity
             catch (RuntimeException e) {
                 Log.e(null, "caught exception:RUNTIME EXCEP...");
             }
-            return builder.toString();
+            return builder.toString();*/
         }
     }
 
