@@ -3,6 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:scrollbars="none">-->
+        <!--<FrameLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+            <!--<ImageView-->
+                <!--android:id="@+id/bg_img"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:scaleType="centerCrop"/>-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/nest_cool" />
+
 
     <TextView
         android:id="@+id/dataDisplay"
@@ -19,6 +38,7 @@
         android:layout_centerInParent="true"
         android:layout_below="@+id/dataDisplay"
         android:id="@+id/numberPicker" />
+
     <Button
         android:id="@+id/set"
         android:layout_below="@+id/numberPicker"
@@ -61,20 +81,21 @@
         android:layout_height="wrap_content"
         android:text="Fan Mode"
         android:textColor="@color/bg_drawer"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentLeft="true"
         android:id="@+id/fanMode"
         android:layout_below="@+id/set"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:layout_alignEnd="@+id/numberPicker" />
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="System Mode"
         android:textColor="@color/bg_drawer"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentLeft="true"
         android:id="@+id/systemMode"
         android:layout_below="@+id/fanMode"
-        android:layout_gravity="center" />
-
+        android:layout_gravity="center"
+        android:layout_alignEnd="@+id/fanMode" />
+        <!--</FrameLayout>-->
+    <!--</ScrollView>-->
 </RelativeLayout>
