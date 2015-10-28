@@ -76,24 +76,7 @@ public class SetTemp extends AppCompatActivity  {
 
         dataDisplay.setText(display.toString());
 
-        final Switch awayModeSwitch = (Switch)  findViewById(R.id.awayMode);
-        awayModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                System.out.println("CHANGEDDDD");
-                if(awayModeSwitch.isChecked()) {
-                    new NestAwayAsyncTask().execute("on");
-                    Toast.makeText(getBaseContext(), "Away mode is set", Toast.LENGTH_LONG).show();
-                }
-                else{
-                    new NestAwayAsyncTask().execute("off");
-                    Toast.makeText(getBaseContext(), "Home mode is set", Toast.LENGTH_LONG).show();
-                }
-
-            }
-
-        });
+        
         final Switch fanModeSwitch = (Switch)  findViewById(R.id.fanMode);
         fanModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 

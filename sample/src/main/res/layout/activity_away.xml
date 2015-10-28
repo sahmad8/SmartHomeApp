@@ -9,12 +9,19 @@
         android:layout_height="wrap_content"
         android:text="Away Status"
         android:textColor="@color/bg_drawer"
-        android:id="@+id/awayswitch"
+        android:id="@+id/awaySwitch"
         android:layout_marginTop="@android:dimen/thumbnail_height"
         android:shadowColor="#A8A8A8"
         android:shadowDx="0"
         android:shadowDy="0"
         android:layout_gravity="center_horizontal|center_vertical"
         android:checked="false" />
-
+    <Button
+        android:id="@+id/returnToMain"
+        android:layout_below="@+id/awaySwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:onClick="returnToMain"
+        android:text="Return" />
 </LinearLayout>

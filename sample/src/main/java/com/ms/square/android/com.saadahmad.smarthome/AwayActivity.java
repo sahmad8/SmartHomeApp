@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.ms.square.android.R;
 import com.ms.square.android.etsyblurdemo.MainActivity;
@@ -43,23 +44,34 @@ public class AwayActivity extends AppCompatActivity {
             Log.e(null,"Json exception caught");
         }
         setContentView(R.layout.activity_away);
-        away_switch=(Switch) findViewById(R.id.awayswitch);
+        away_switch=(Switch) findViewById(R.id.awaySwitch);
         away_switch.setChecked(initial_away_status);
-        away_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        final Switch awayModeSwitch = away_switch;
+        awayModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-              try
-              {
-                  nestData.put("away",isChecked);
-              }
-              catch (JSONException e)
-              {
-                  Log.e(null,"Some Json exception");
-              }
-                Intent away_intent=new Intent(getBaseContext(), MainActivity.class);
-                away_intent.putExtra("nestData", nestData.toString());
-                startActivity(away_intent);
+                System.out.println("CHANGEDDDD");
+                try {
+                    nestData.put("away", isChecked);
+                } catch (JSONException e) {
+                    Log.e(null, "Some Json exception");
+                }
+
+
+
+                if(awayModeSwitch.isChecked()) {
+                    new NestAwayAsyncTask().execute("on");
+                    Toast.makeText(getBaseContext(), "Away mode is set", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    new NestAwayAsyncTask().execute("off");
+                    Toast.makeText(getBaseContext(), "Home mode is set", Toast.LENGTH_LONG).show();
+                }
+
             }
+
         });
 
     }
@@ -67,7 +79,6 @@ public class AwayActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         return true;
     }
 
@@ -76,5 +87,10 @@ public class AwayActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    public void returnToMain(View v){
+        final Intent intent=new Intent(getBaseContext(), MainActivity.class);
+        intent.putExtra("nestData", nestData.toString());
+        startActivity(intent);
 
+    }
 }

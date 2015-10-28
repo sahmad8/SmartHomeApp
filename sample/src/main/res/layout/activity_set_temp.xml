@@ -59,22 +59,12 @@
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Away Mode"
-        android:textColor="@color/bg_drawer"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentLeft="true"
-        android:id="@+id/awayMode"
-        android:layout_below="@+id/set"
-        android:layout_gravity="center" />
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Fan Mode"
         android:textColor="@color/bg_drawer"
         android:layout_centerHorizontal="true"
         android:layout_alignParentLeft="true"
         android:id="@+id/fanMode"
-        android:layout_below="@+id/awayMode"
+        android:layout_below="@+id/set"
         android:layout_gravity="center" />
     <Switch
         android:layout_width="wrap_content"
