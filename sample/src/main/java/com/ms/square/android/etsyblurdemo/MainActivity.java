@@ -27,10 +27,19 @@ import com.ms.square.android.com.saadahmad.smarthome.AwayActivity;
 import com.ms.square.android.com.saadahmad.smarthome.Intruder;
 import com.ms.square.android.com.saadahmad.smarthome.SetTemp;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -40,10 +49,16 @@ public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, View.OnClickListener {
 
 
-    public String test=null;
-    private JSONObject nestData;
     Timer timer=null;
     private boolean away_mode=false;
+
+    private int targetTemperature = 75;
+    public String json_String= null;
+    public String test=null;
+    private JSONObject nestData;
+    private Intent intent = null;
+    Switch away_switch=null;
+
 
 
     /**
@@ -58,7 +73,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Intent intent= getIntent();
+        intent= getIntent();
+        json_String=intent.getStringExtra("nestData");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -69,7 +85,6 @@ public class MainActivity extends AppCompatActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-
         StringBuilder display = new StringBuilder();
 
         try {
@@ -114,6 +129,35 @@ public class MainActivity extends AppCompatActivity
             System.out.println("About to schedule\n");
             timer.schedule(doAsynchronousTask, 0, 20000); //execute in every 50000 ms
         }
+//        //Toast.makeText(this, json_String, Toast.LENGTH_LONG).show();
+//        final Handler handler = new Handler();
+//        final PerformBackgroundTask performBackgroundTask = new PerformBackgroundTask();
+//        Timer timer = new Timer();
+//        TimerTask doAsynchronousTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//                handler.post(new Runnable() {
+//                    public void run() {
+//                        try {
+//                            //updateDisplayData(intent);
+//                            // PerformBackgroundTask this class is the class that extends AsynchTask
+//                            performBackgroundTask.execute("dont matter");
+//                        } catch (Exception e) {
+//                            // TODO Auto-generated catch block
+//                        }
+//                        while(test==null){
+//
+//                        }
+//                        System.out.println("AJBDA"+test);
+//                    }
+//                });
+//            }
+//
+//        };
+//
+//
+//        timer.schedule(doAsynchronousTask, 0, 50000); //execute in every 50000 ms
+
     }
 
     @Override
@@ -239,11 +283,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    /**
-     * Asynchornous subclass, MyAsyncTask
-     * extends asynchronouse task
-     * overrides background method and execuutes http actions
-     */
+
     private class PerformBackgroundTask extends AsyncTask<String, Integer, Double> {
 
         private Activity activity=null;
@@ -300,8 +340,7 @@ public class MainActivity extends AppCompatActivity
             timer.cancel();
             activity.startActivity(new Intent(activity.getBaseContext(), Intruder.class));
             return null;
-
-            /*
+/*
             InputStream inputStream = null;
             StringBuilder builder=new StringBuilder();
             HttpResponse response=null;
@@ -329,7 +368,29 @@ public class MainActivity extends AppCompatActivity
             }
             catch (RuntimeException e) {
                 Log.e(null, "caught exception:RUNTIME EXCEP...");
+            }*/
+            /*
+            return builder.toString();
+            StringBuilder display = new StringBuilder();
+            try {
+                nestData = new JSONObject(json_String);
+                display.append("Current Temperature: ");
+                display.append(nestData.getString("temperature") + "\n");
+                display.append("Target Temperature: ");
+
+                double targetTemp = Double.parseDouble(nestData.getString("target"));
+                targetTemperature = (int)targetTemp;
+                display.append(targetTemperature + "\n");
+            }catch (JSONException e) {
+                e.printStackTrace();
             }
+
+
+
+            TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
+
+            dataDisplay.setText(display.toString());
+
             return builder.toString();*/
         }
     }

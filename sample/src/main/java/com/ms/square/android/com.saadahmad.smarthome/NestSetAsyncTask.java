@@ -72,7 +72,7 @@ public class NestSetAsyncTask extends AsyncTask<String, Integer, Double> {
         // Create new HttpClient and HTTPPOST
 
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://128.83.190.58/test.py/nestSet?temperature="+valueIWantToSend);     //this is the url of our post servlet for our web application
+            HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/nestSet?temperature="+valueIWantToSend);     //this is the url of our post servlet for our web application
             try {
                 String paramstring="test hope this works";
                 response = httpclient.execute(httppost);           //currently, no response is returned by webiste
