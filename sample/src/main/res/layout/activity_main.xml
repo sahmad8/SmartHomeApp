@@ -23,6 +23,9 @@
         android:scaleType="centerCrop"
         android:visibility="gone">
     </ImageView>
+    <FrameLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"    >
     <TextView
         android:id="@+id/dataDisplay"
         android:textSize="20dp"
@@ -32,7 +35,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="46dp" />
-
+    </FrameLayout>
     <!-- android:layout_gravity="start" tells DrawerLayout to treat
          this as a sliding drawer on the left side for left-to-right
          languages and on the right side for right-to-left languages.

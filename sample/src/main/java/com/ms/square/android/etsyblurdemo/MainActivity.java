@@ -191,6 +191,10 @@ public class MainActivity extends AppCompatActivity
             case 4:
                 mTitle="Away/Home";
                 Intent away_intent=new Intent(this, AwayActivity.class);
+                if (timer!=null) {
+                    timer.cancel();
+                    timer = null;
+                }
                 away_intent.putExtra("nestData", nestData.toString());
                 startActivity(away_intent);
                 break;

@@ -127,7 +127,7 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
         protected void onPostExecute(Void result){
             //Toast.makeText(null, response.toString(), Toast.LENGTH_LONG).show();
             //Toast.makeText(null, response.toString(), Toast.LENGTH_LONG).show();
-
+            this.postData(null);
         }
 
         /**
