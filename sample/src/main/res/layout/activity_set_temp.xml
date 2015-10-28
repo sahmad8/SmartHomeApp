@@ -35,6 +35,7 @@
     <NumberPicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/bg_drawer"
         android:layout_centerInParent="true"
         android:layout_below="@+id/dataDisplay"
         android:id="@+id/numberPicker" />
@@ -79,6 +80,7 @@
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textOff="Auto"
         android:text="Fan Mode"
         android:textColor="@color/bg_drawer"
         android:layout_alignParentLeft="true"
@@ -90,6 +92,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="System Mode"
+        android:textOff="Cool"
+        android:textOn="Heat"
         android:textColor="@color/bg_drawer"
         android:layout_alignParentLeft="true"
         android:id="@+id/systemMode"

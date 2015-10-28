@@ -84,13 +84,32 @@ public class SetTemp extends AppCompatActivity  {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 System.out.println("FANNNNNNN");
 
-                if(fanModeSwitch.isChecked()) {
+                if (fanModeSwitch.isChecked()) {
                     new NestSetFanAsyncTask().execute("on");
                     Toast.makeText(getBaseContext(), "Fan set to on", Toast.LENGTH_LONG).show();
-                }
-                else{
+                } else {
                     new NestSetFanAsyncTask().execute("auto");
                     Toast.makeText(getBaseContext(), "Fan set to auto", Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+
+        });
+        final Switch modeSwitch = (Switch)  findViewById(R.id.systemMode);
+        modeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                System.out.println("SYSTEM");
+
+                if(modeSwitch.isChecked()) {
+                    new NestSetModeAsyncTask().execute("heat");
+                    Toast.makeText(getBaseContext(), "System is set to heat", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    new NestSetModeAsyncTask().execute("cool");
+                    Toast.makeText(getBaseContext(), "System is set to cool", Toast.LENGTH_LONG).show();
                 }
 
 
