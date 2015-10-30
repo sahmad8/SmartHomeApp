@@ -1,11 +1,13 @@
 package com.ms.square.android.com.saadahmad.smarthome;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -25,8 +27,10 @@ import org.json.JSONObject;
  * That will set the target temp on nest thermostat
  */
 public class SetTemp extends AppCompatActivity  {
+
     NumberPicker np;
-    Integer setting=75;
+    private int setting = 75;
+    private Drawable image;
     private Button btn;
     private int maxTemp = 90;
     private int minTemp = 50;
@@ -42,17 +46,17 @@ public class SetTemp extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_temp);
 
-        np = (NumberPicker) findViewById(R.id.numberPicker);
+//        np = (NumberPicker) findViewById(R.id.numberPicker);
         btn = (Button) findViewById(R.id.button1);
-        np.setMaxValue(maxTemp);
-        np.setMinValue(minTemp);
+//        np.setMaxValue(maxTemp);
+//        np.setMinValue(minTemp);
         //btn.setOnClickListener(this);
-        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-        @Override
-        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-           setting=newVal;
-        }
-    });
+//        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+//        @Override
+//        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+//           setting=newVal;
+//        }
+//    });
         //Bundle b =  getIntent().getExtras();
         Intent intent= getIntent();
         StringBuilder display = new StringBuilder();
@@ -67,7 +71,11 @@ public class SetTemp extends AppCompatActivity  {
             double targetTemp = Double.parseDouble(nestData.getString("target"));
             targetTemperature  = (int)targetTemp;
             display.append(targetTemperature + "\n");
-            np.setValue(targetTemperature);
+//            np.setValue(targetTemperature);
+
+            TextView tempDisplay = (TextView) findViewById(R.id.tempDisplay);
+            tempDisplay.setText(String.valueOf(targetTemperature));
+            setting = targetTemperature;
 
         }catch (JSONException e) {
             e.printStackTrace();
@@ -106,10 +114,16 @@ public class SetTemp extends AppCompatActivity  {
                 if(modeSwitch.isChecked()) {
                     new NestSetModeAsyncTask().execute("heat");
                     Toast.makeText(getBaseContext(), "System is set to heat", Toast.LENGTH_LONG).show();
+                    ImageView background = (ImageView) findViewById(R.id.background);
+                    image = getResources().getDrawable(R.drawable.nest_heat);
+                    background.setImageDrawable(image);
                 }
                 else{
                     new NestSetModeAsyncTask().execute("cool");
                     Toast.makeText(getBaseContext(), "System is set to cool", Toast.LENGTH_LONG).show();
+                    ImageView background = (ImageView) findViewById(R.id.background);
+                    image = getResources().getDrawable(R.drawable.nest_cool);
+                    background.setImageDrawable(image);
                 }
 
 
@@ -125,20 +139,29 @@ public class SetTemp extends AppCompatActivity  {
     public void increaseTemp(View v){
         if(targetTemperature < 90) {
             targetTemperature++;
-            np.setValue(targetTemperature);
+//            np.setValue(targetTemperature);
+
+            setting = targetTemperature;
+            TextView tempDisplay = (TextView) findViewById(R.id.tempDisplay);
+            tempDisplay.setText(String.valueOf(setting));
+
         }
     }
     public void decreaseTemp(View v){
         if(targetTemperature > 50) {
             targetTemperature--;
-            np.setValue(targetTemperature);
+//            np.setValue(targetTemperature);
+            setting = targetTemperature;
+            TextView tempDisplay = (TextView) findViewById(R.id.tempDisplay);
+            tempDisplay.setText(String.valueOf(setting));
         }
+
     }
 
     public void setTemp(View v) {
 
-        new NestSetTemperatureAsyncTask().execute(Integer.toString(np.getValue()));
-        Toast.makeText(this, "Set Temperature to "+ np.getValue(), Toast.LENGTH_LONG).show();
+        new NestSetTemperatureAsyncTask().execute(Integer.toString(setting));
+        Toast.makeText(this, "Set Temperature to "+ setting /*np.getValue()*/, Toast.LENGTH_LONG).show();
 
 //        StringBuilder builder=new StringBuilder();
 //        HttpClient httpclient = new DefaultHttpClient();
@@ -171,7 +194,7 @@ public class SetTemp extends AppCompatActivity  {
     }
     public void setFan(){
         new NestSetFanAsyncTask().execute(Integer.toString(np.getValue()));
-        Toast.makeText(this, "Set Fan to "+ np.getValue(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Set Fan to "+ setting /*np.getValue()*/, Toast.LENGTH_LONG).show();
 
     }
     public void returnToMain(View v){
