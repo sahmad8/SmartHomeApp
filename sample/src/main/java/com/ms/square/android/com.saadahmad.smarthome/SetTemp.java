@@ -2,8 +2,10 @@ package com.ms.square.android.com.saadahmad.smarthome;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -16,9 +18,19 @@ import android.widget.Toast;
 import com.ms.square.android.R;
 import com.ms.square.android.etsyblurdemo.MainActivity;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * Created by Saad Ahmad on 10/2/2015.
@@ -43,6 +55,11 @@ public class SetTemp extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        new MyAsyncTask().execute("nah");
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_temp);
 
@@ -58,11 +75,30 @@ public class SetTemp extends AppCompatActivity  {
 //        }
 //    });
         //Bundle b =  getIntent().getExtras();
+
         Intent intent= getIntent();
+        //nestData = resetNestData(intent);
+
+
+
+
+
+
         StringBuilder display = new StringBuilder();
 
+        // display nestDat on screen
+        while(myresult == null){
+
+        }
+        System.out.println("999999999999999");
+        System.out.println(nestData);
+        final Switch fanModeSwitch = (Switch)  findViewById(R.id.fanMode);
+        final Switch modeSwitch = (Switch)  findViewById(R.id.systemMode);
+
         try {
-            nestData = new JSONObject(intent.getStringExtra("nestData"));
+
+            nestData = new JSONObject(myresult);
+            //nestData = new JSONObject(intent.getStringExtra("nestData"));
             Toast.makeText(this, "The target is "+ nestData.getString("target") , Toast.LENGTH_LONG).show();
             display.append("Current Temperature: ");
             display.append(nestData.getString("temperature") + "\n");
@@ -72,6 +108,25 @@ public class SetTemp extends AppCompatActivity  {
             targetTemperature  = (int)targetTemp;
             display.append(targetTemperature + "\n");
 //            np.setValue(targetTemperature);
+
+
+            if(nestData.getString("fan").equals("false")){
+                fanModeSwitch.setChecked(false);
+            }
+            else{
+                fanModeSwitch.setChecked(true);
+            }
+            ImageView background = (ImageView) findViewById(R.id.background);
+            if(nestData.getString("mode").equals("cool")){
+                modeSwitch.setChecked(false);
+                image = getResources().getDrawable(R.drawable.nest_cool);
+                background.setImageDrawable(image);
+            }
+            else{
+                modeSwitch.setChecked(true);
+                image = getResources().getDrawable(R.drawable.nest_heat);
+                background.setImageDrawable(image);
+            }
 
             TextView tempDisplay = (TextView) findViewById(R.id.tempDisplay);
             tempDisplay.setText(String.valueOf(targetTemperature));
@@ -85,7 +140,7 @@ public class SetTemp extends AppCompatActivity  {
         dataDisplay.setText(display.toString());
 
         
-        final Switch fanModeSwitch = (Switch)  findViewById(R.id.fanMode);
+
         fanModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -104,24 +159,21 @@ public class SetTemp extends AppCompatActivity  {
             }
 
         });
-        final Switch modeSwitch = (Switch)  findViewById(R.id.systemMode);
         modeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 System.out.println("SYSTEM");
-
+                ImageView background = (ImageView) findViewById(R.id.background);
                 if(modeSwitch.isChecked()) {
                     new NestSetModeAsyncTask().execute("heat");
                     Toast.makeText(getBaseContext(), "System is set to heat", Toast.LENGTH_LONG).show();
-                    ImageView background = (ImageView) findViewById(R.id.background);
                     image = getResources().getDrawable(R.drawable.nest_heat);
                     background.setImageDrawable(image);
                 }
                 else{
                     new NestSetModeAsyncTask().execute("cool");
                     Toast.makeText(getBaseContext(), "System is set to cool", Toast.LENGTH_LONG).show();
-                    ImageView background = (ImageView) findViewById(R.id.background);
                     image = getResources().getDrawable(R.drawable.nest_cool);
                     background.setImageDrawable(image);
                 }
@@ -201,6 +253,79 @@ public class SetTemp extends AppCompatActivity  {
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("nestData", nestData.toString());
         startActivity(intent);
+    }
+    private class MyAsyncTask extends AsyncTask<String, Integer, Double> {
+
+        @Override
+        protected Double doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            final String returned = postData(params[0]);
+            return null;
+        }
+
+
+        /**
+         * onPosttExecute-displays toast upon http execute completion
+         * exits application
+         * @param result
+         */
+        protected void onPostExecute(Void result){
+            //Toast.makeText(null, response.toString(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(null, response.toString(), Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * onProgressUpdate-
+         * updates progress bar
+         * @param progress
+         */
+
+        /**
+         * poData-handles http actions
+         * called when user clicks submit-then asynchronous task is created and calls this method
+         * Uses http address of our servlet code for onPost (for our webapplciation which holds all the scores)
+         * @param valueIWantToSend
+         */
+        public String postData(String valueIWantToSend) {
+            InputStream inputStream = null;
+            StringBuilder builder=new StringBuilder();
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/nestGet");     //this is the url of our post servlet for our web application
+            try {
+
+                response = httpclient.execute(httppost);           //currently, no response is returned by webiste
+                HttpEntity entity = response.getEntity();
+                if(entity != null) {
+                    HttpEntity entity2 = response.getEntity();
+                    InputStream content = entity2.getContent();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+                    String line;
+                    while((line = reader.readLine()) != null){
+                        builder.append(line);
+                    }
+                    myresult=builder.toString();
+                }
+            } catch (ClientProtocolException e) {
+                Log.e(null, "caught exception:CLIENT PROTO..");  //log for debugging in Android studio console.
+            }
+            catch (IOException e) {
+                Log.e(null, "caught exception:IO EXCEP..");
+            }
+            catch (RuntimeException e) {
+                Log.e(null, "caught exception:RUNTIME EXCEP...");
+            }
+            System.out.println("++++++++++++");
+            System.out.println(myresult);
+        try {
+            nestData = new JSONObject(myresult);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+            System.out.println(nestData.toString());
+            return builder.toString();
+
+        }
+
     }
 
 }

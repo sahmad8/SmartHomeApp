@@ -1,8 +1,11 @@
 package com.ms.square.android.etsyblurdemo;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +28,7 @@ import android.widget.Toast;
 import com.ms.square.android.R;
 import com.ms.square.android.com.saadahmad.smarthome.AwayActivity;
 import com.ms.square.android.com.saadahmad.smarthome.Intruder;
+import com.ms.square.android.com.saadahmad.smarthome.RSBlurFragment;
 import com.ms.square.android.com.saadahmad.smarthome.SetTemp;
 
 import org.apache.http.HttpEntity;
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         intent= getIntent();
         json_String=intent.getStringExtra("nestData");
+        RSBlurFragment ft = new RSBlurFragment();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -398,5 +403,7 @@ public class MainActivity extends AppCompatActivity
             return builder.toString();*/
         }
     }
+
+
 
 }

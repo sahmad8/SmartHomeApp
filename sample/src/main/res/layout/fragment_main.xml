@@ -26,6 +26,13 @@
                 android:textColor="@color/bg_drawer"
                 android:id="@+id/text_Nest"
                 android:layout_gravity="left|top" />
+            <LinearLayout
+                android:id="@+id/controls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#7f000000"
+                android:orientation="vertical"
+                android:layout_gravity="bottom"/>
 
         </FrameLayout>
     </ScrollView>
