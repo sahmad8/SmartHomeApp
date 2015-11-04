@@ -57,6 +57,7 @@ public class Authenticate extends ActionBarActivity implements View.OnClickListe
     public String myresult=null;
     private ImageView imageView;
     private Bitmap bmp=null;
+    private boolean lockOn;
 
 
     /**onCreate Method
@@ -69,6 +70,7 @@ public class Authenticate extends ActionBarActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
+        lockOn = false;
         // playerscore = intent.getIntExtra("thescore", 0);
         setContentView(R.layout.activity_authenticate);
         value = (EditText) findViewById(R.id.editText1);
@@ -121,7 +123,10 @@ public class Authenticate extends ActionBarActivity implements View.OnClickListe
             }
             //Toast.makeText(this, "Welcome", Toast.LENGTH_LONG).show();
             final Intent intent=new Intent(getBaseContext(), MainActivity.class);
-            intent.putExtra("nestData", myresult);
+            Bundle extras = new Bundle();
+            extras.putString("nestData", myresult);
+            extras.putBoolean("lock", lockOn);
+            intent.putExtras(extras);
             startActivity(intent);
             //imageView.setImageBitmap(bmp);
         }

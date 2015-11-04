@@ -29,6 +29,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".com.saadahmad.smarthome.SetLock"
+            android:label="SetLock" >
+            <intent-filter>
+                <action android:name="android.intent.action.LOCKSET" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".com.saadahmad.smarthome.Authenticate"
             android:label="SH" >
             <intent-filter>

@@ -28,9 +28,9 @@ public class RSBlurFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.activity_main, container, false);
         image = (ImageView) view.findViewById(R.id.bg_img);
-        text = (TextView) view.findViewById(R.id.dataDisplay);
+        text = (TextView) view.findViewById(R.id.text_Nest);
         statusText = addStatusText((ViewGroup) view.findViewById(R.id.controls));
         applyBlur();
         return view;

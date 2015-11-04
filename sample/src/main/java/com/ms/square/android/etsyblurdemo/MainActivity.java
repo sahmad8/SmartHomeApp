@@ -29,6 +29,7 @@ import com.ms.square.android.R;
 import com.ms.square.android.com.saadahmad.smarthome.AwayActivity;
 import com.ms.square.android.com.saadahmad.smarthome.Intruder;
 import com.ms.square.android.com.saadahmad.smarthome.RSBlurFragment;
+import com.ms.square.android.com.saadahmad.smarthome.SetLock;
 import com.ms.square.android.com.saadahmad.smarthome.SetTemp;
 
 import org.apache.http.HttpEntity;
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity
     public String test=null;
     private JSONObject nestData;
     private Intent intent = null;
+    private Bundle extras = null;
+    private boolean lockOn;
     Switch away_switch=null;
 
 
@@ -78,9 +81,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         intent= getIntent();
-        json_String=intent.getStringExtra("nestData");
+        extras = intent.getExtras();
+        json_String = extras.getString("nestData");
+        lockOn = extras.getBoolean("lock");
+        System.out.println("YYYYYYYYY");
+        System.out.println(lockOn);
+
         RSBlurFragment ft = new RSBlurFragment();
-        super.onCreate(savedInstanceState);
+        super.onCreate
+
+
+                (savedInstanceState);
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -187,11 +198,21 @@ public class MainActivity extends AppCompatActivity
                     timer.cancel();
                     timer = null;
                 }
+
                 intent.putExtra("nestData", nestData.toString());
+                intent.putExtra("lock", lockOn);
                 startActivity(intent);
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
+                Intent lock_intent=new Intent(this, SetLock.class);
+                if (timer!=null) {
+                    timer.cancel();
+                    timer = null;
+                }
+                lock_intent.putExtra("nestData", nestData.toString());
+                lock_intent.putExtra("lock", lockOn);
+                startActivity(lock_intent);
                 break;
             case 4:
                 mTitle="Away/Home";

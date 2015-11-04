@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity$PlaceholderFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/bg_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@drawable/away"/>
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="150sp"
+                android:text="Lock"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textStyle="bold"
+                android:textSize="50sp"
+                android:id="@+id/lockSwitch"
+                android:layout_marginTop="@android:dimen/thumbnail_height"
+                android:shadowColor="#A8A8A8"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:textOff="Unlocked"
+                android:textOn="Locked"
+                android:layout_gravity="center_horizontal"
+                android:checked="false" />
+            <Button
+                android:id="@+id/returnToMain"
+                android:layout_below="@+id/lockSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentRight = "true"
+                android:onClick="returnToMain"
+                android:text="Return"
+                android:layout_gravity="center_horizontal" />
+        </FrameLayout>
+    </ScrollView>
+</RelativeLayout>
