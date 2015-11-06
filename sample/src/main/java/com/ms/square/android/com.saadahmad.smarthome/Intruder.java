@@ -51,6 +51,7 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
     public String myresult=null;
     private ImageView imageView;
     private Bitmap bmp=null;
+    private String Target=null;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,8 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
         // Vibrate for 500 milliseconds
         v.vibrate(2000);
 
-        //Intent intent = getIntent();
+        Intent intent = getIntent();
+        Target=intent.getStringExtra("Target");
         setContentView(R.layout.activity_intruder);
         value = (EditText) findViewById(R.id.editText1);
         //btn = (Button) findViewById(R.id.button2);
@@ -126,7 +128,7 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
          */
         protected void onPostExecute(Void result){
             //Toast.makeText(null, response.toString(), Toast.LENGTH_LONG).show();
-            //Toast.makeText(null, response.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Unknown person at your door", Toast.LENGTH_LONG).show();
             this.postData(null);
         }
 
@@ -148,8 +150,15 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
         public String postData(String valueIWantToSend) {
             // Create new HttpClient and HTTPPOST
             try {
-                InputStream in = new URL("http://128.83.52.253:8079/imagetest.py/showImage").openStream();
-                bmp = BitmapFactory.decodeStream(in);
+                if (Target.equals("motion")) {
+                    InputStream in = new URL("http://128.83.52.253:8079/imagetest.py/showImage").openStream();
+                    bmp = BitmapFactory.decodeStream(in);
+                }
+                else {
+                    InputStream in = new URL("http://128.83.52.253:8079/imagetest.py/faceUknown").openStream();
+                    bmp = BitmapFactory.decodeStream(in);
+                }
+
             } catch (Exception e) {
                 Log.e(null, "caught exception something went wrong, this should not happen since we were guaranteed the image was there");
                 // log error

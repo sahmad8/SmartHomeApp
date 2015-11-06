@@ -88,7 +88,7 @@ public class OkidokeysSetLockAsyncTask extends AsyncTask<String, Integer, Double
         System.out.println("__________________________");
         System.out.println(valueIWantToSend);
 
-        HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/" + valueIWantToSend);     //this is the url of our post servlet for our web application
+        HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/lockOn");     //this is the url of our post servlet for our web application
         try {
             response = httpclient.execute(httppost);           //currently, no response is returned by webiste
             HttpEntity entity = response.getEntity();

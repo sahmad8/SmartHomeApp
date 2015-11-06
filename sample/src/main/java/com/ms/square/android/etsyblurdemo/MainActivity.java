@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +29,9 @@ import android.widget.Toast;
 
 import com.ms.square.android.R;
 import com.ms.square.android.com.saadahmad.smarthome.AwayActivity;
+import com.ms.square.android.com.saadahmad.smarthome.FacialRecon;
 import com.ms.square.android.com.saadahmad.smarthome.Intruder;
+import com.ms.square.android.com.saadahmad.smarthome.OkidokeysSetLockAsyncTask;
 import com.ms.square.android.com.saadahmad.smarthome.RSBlurFragment;
 import com.ms.square.android.com.saadahmad.smarthome.SetLock;
 import com.ms.square.android.com.saadahmad.smarthome.SetTemp;
@@ -65,8 +68,13 @@ public class MainActivity extends AppCompatActivity
     private Intent intent = null;
     private Bundle extras = null;
     private boolean lockOn;
+    private boolean faceRecon;
     Switch away_switch=null;
     Bundle instance;
+    public MediaPlayer mp3_notify_known;
+    public MediaPlayer mp3_notify_uknown;
+    private String personatmydoor="null";
+    boolean changed=false;
 
 
     /**
@@ -86,6 +94,7 @@ public class MainActivity extends AppCompatActivity
         extras = intent.getExtras();
         json_String = extras.getString("nestData");
         lockOn = extras.getBoolean("lock");
+        faceRecon = extras.getBoolean("faceRecon");
         System.out.println("YYYYYYYYY");
         System.out.println(lockOn);
 
@@ -101,17 +110,19 @@ public class MainActivity extends AppCompatActivity
 //// Complete the changes added above
 //        ft.commit();
 
+        System.out.println(faceRecon);
+
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
+        mp3_notify_known=MediaPlayer.create(this.getBaseContext(), R.raw.notifyknown);
         this.myActivity=this;
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         StringBuilder display = new StringBuilder();
-
         try {
             nestData = new JSONObject(intent.getStringExtra("nestData"));
             Toast.makeText(this, "The target is "+ nestData.getString("target") , Toast.LENGTH_LONG).show();
@@ -126,7 +137,7 @@ public class MainActivity extends AppCompatActivity
         }
         TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
         dataDisplay.setText(display.toString());
-        if (away_mode) {
+        if (away_mode || faceRecon) {
             final Handler handler = new Handler();
             timer = new Timer();
             TimerTask doAsynchronousTask = new TimerTask() {
@@ -135,24 +146,27 @@ public class MainActivity extends AppCompatActivity
                     handler.postDelayed(new Runnable() {
                         public void run() {
                             try {
+                                //changed=false;
                                 PerformBackgroundTask performBackgroundTask = new PerformBackgroundTask(myActivity);
                                 // PerformBackgroundTask this class is the class that extends AsynchTask
                                 performBackgroundTask.execute("dont matter");
                             } catch (Exception e) {
                                 // TODO Auto-generated catch block
                             }
-
-                            System.out.println("AJBDA" + test);
+                            if (changed) {
+                                    mp3_notify_known.start();
+                                    Toast.makeText(getBaseContext(), personatmydoor + " is at ur door!!", Toast.LENGTH_LONG).show();
+                                    new OkidokeysSetLockAsyncTask().execute("lockOn");
+                            }
                             handler.removeCallbacks(this);
                         }
-                    }, 9000);
-                    final Intent intenter = new Intent();
+                    }, 6000);
                     System.out.println("GETHEREEVERYtIME:::!");
                 }
 
             };
             System.out.println("About to schedule\n");
-            timer.schedule(doAsynchronousTask, 0, 20000); //execute in every 50000 ms
+            timer.schedule(doAsynchronousTask, 0, 8000); //execute in every 50000 ms
         }
 //        //Toast.makeText(this, json_String, Toast.LENGTH_LONG).show();
 //        final Handler handler = new Handler();
@@ -199,7 +213,7 @@ public class MainActivity extends AppCompatActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = "Home Page";
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
@@ -208,7 +222,6 @@ public class MainActivity extends AppCompatActivity
                     timer.cancel();
                     timer = null;
                 }
-
                 intent.putExtra("nestData", nestData.toString());
                 intent.putExtra("lock", lockOn);
                 startActivity(intent);
@@ -222,6 +235,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 lock_intent.putExtra("nestData", nestData.toString());
                 lock_intent.putExtra("lock", lockOn);
+                lock_intent.putExtra("faceRecon",faceRecon);
                 startActivity(lock_intent);
                 break;
             case 4:
@@ -232,7 +246,21 @@ public class MainActivity extends AppCompatActivity
                     timer = null;
                 }
                 away_intent.putExtra("nestData", nestData.toString());
+                away_intent.putExtra("lock", lockOn);
+                away_intent.putExtra("faceRecon", faceRecon);
                 startActivity(away_intent);
+                break;
+            case 5:
+                mTitle = "FacialRecon";
+                Intent face=new Intent(this, FacialRecon.class);
+                if (timer!=null) {
+                    timer.cancel();
+                    timer = null;
+                }
+                face.putExtra("nestData", nestData.toString());
+                face.putExtra("lock", lockOn);
+                face.putExtra("faceRecon",faceRecon);
+                startActivity(face);
                 break;
         }
     }
@@ -347,7 +375,6 @@ public class MainActivity extends AppCompatActivity
          */
         protected void onPostExecute(Void result){
             //Toast.makeText(null, response.toString(), Toast.LENGTH_LONG).show();
-            //Toast.makeText(null, response.toString(), Toast.LENGTH_LONG).show();
         }
 
         /**
@@ -367,71 +394,71 @@ public class MainActivity extends AppCompatActivity
          */
         public String postData(String valueIWantToSend) {
 //  This code returns an image stored on the server.
-            try {
-                InputStream in = new URL("http://128.83.52.253:8079/imagetest.py/showImage").openStream();
-                //bmp = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e(null, "caught exception");
-                test="Exception";
-                return null;
-                // log error
-            }
-            test="GOT IT";
-            timer.cancel();
-            activity.startActivity(new Intent(activity.getBaseContext(), Intruder.class));
-            return null;
-/*
-            InputStream inputStream = null;
-            StringBuilder builder=new StringBuilder();
-            HttpResponse response=null;
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/nestGet");     //this is the url of our post servlet for our web application
-            try {
-                String paramstring="test hope this works";
-                response = httpclient.execute(httppost);           //currently, no response is returned by webiste
-                HttpEntity entity = response.getEntity();
-                if(entity != null) {
-                    HttpEntity entity2 = response.getEntity();
-                    InputStream content = entity2.getContent();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-                    String line;
-                    while((line = reader.readLine()) != null){
-                        builder.append(line);
-                    }
-                    test=builder.toString();
+           InputStream in=null;
+            if (away_mode) {
+                try {
+                    in = new URL("http://128.83.52.253:8079/imagetest.py/showImage").openStream();
+                    //bmp = BitmapFactory.decodeStream(in);
+                } catch (Exception e) {
+                    Log.e(null, "caught exception");
+                    test = "Exception";
+                    return null;
+                    // log error
                 }
-            } catch (ClientProtocolException e) {
-                Log.e(null, "caught exception:CLIENT PROTO..");  //log for debugging in Android studio console.
+                test = "GOT IT";
+                timer.cancel();
+                Intent intrude=new Intent(activity.getBaseContext(), Intruder.class);
+                intrude.putExtra("Target", "motion");
+                startActivity(intrude);
+                return null;
             }
-            catch (IOException e) {
-                Log.e(null, "caught exception:IO EXCEP..");
-            }
-            catch (RuntimeException e) {
-                Log.e(null, "caught exception:RUNTIME EXCEP...");
-            }*/
-            /*
+            if (faceRecon)
+            {
+                InputStream inputStream = null;
+                StringBuilder builder=new StringBuilder();
+                HttpResponse response=null;
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost("http://128.83.52.253:8079/imagetest.py/faceRecon");     //this is the url of our post servlet for our web application
+                try {
+                    String paramstring="test hope this works";
+                    response = httpclient.execute(httppost);           //currently, no response is returned by webiste
+                    HttpEntity entity = response.getEntity();
+                    if(entity != null) {
+                        HttpEntity entity2 = response.getEntity();
+                        InputStream content = entity2.getContent();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+                        String line;
+                        while((line = reader.readLine()) != null) {
+                            builder.append(line);
+                        }
+                    }
+                } catch (ClientProtocolException e) {
+                    Log.e(null, "caught exception:CLIENT PROTO..");  //log for debugging in Android studio console.
+                }
+                catch (IOException e) {
+                    Log.e(null, "caught exception:IO EXCEP..");
+                }
+                catch (RuntimeException e) {
+                    Log.e(null, "caught exception:RUNTIME EXCEP...");
+                }
+                changed=false;
+               // personatmydoor=builder.toString();
+                if (personatmydoor.toString().equals(builder.toString()))
+                {
+                    return null;
+                }
+                personatmydoor=builder.toString();
+                if (personatmydoor.toString().equals("Unknown"))
+                {
+                    timer.cancel();
+                    Intent myintent=new Intent(activity, Intruder.class);
+                    myintent.putExtra("Target", "face");
+                    startActivity(myintent);
+                }
+                changed=true;
             return builder.toString();
-            StringBuilder display = new StringBuilder();
-            try {
-                nestData = new JSONObject(json_String);
-                display.append("Current Temperature: ");
-                display.append(nestData.getString("temperature") + "\n");
-                display.append("Target Temperature: ");
-
-                double targetTemp = Double.parseDouble(nestData.getString("target"));
-                targetTemperature = (int)targetTemp;
-                display.append(targetTemperature + "\n");
-            }catch (JSONException e) {
-                e.printStackTrace();
             }
-
-
-
-            TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
-
-            dataDisplay.setText(display.toString());
-
-            return builder.toString();*/
+            return null;
         }
     }
 
