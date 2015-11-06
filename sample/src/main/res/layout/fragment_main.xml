@@ -34,13 +34,13 @@
                 android:background="#7f000000"
                 android:orientation="vertical"
                 android:layout_gravity="bottom"/>
-            <fragment
-                android:id="@+id/shell"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#7f000000"
-                android:orientation="vertical"
-                android:layout_gravity="bottom"/>
+            <!--<fragment-->
+                <!--android:id="@+id/shell"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="#7f000000"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_gravity="bottom"/>-->
 
         </FrameLayout>
     </ScrollView>

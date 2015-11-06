@@ -65,7 +65,7 @@ public class SetLock extends AppCompatActivity {
                     Toast.makeText(getBaseContext(), "Door Locked", Toast.LENGTH_LONG).show();
                     lockOn = true;
                 } else {
-                    new OkidokeysSetLockAsyncTask().execute("lockOff");
+                    new OkidokeysSetLockAsyncTask().execute("lockOn");
                     Toast.makeText(getBaseContext(), "Door Unlocked", Toast.LENGTH_LONG).show();
                     lockOn = false;
                 }
