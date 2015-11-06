@@ -27,6 +27,7 @@ public class SetLock extends AppCompatActivity {
     private Intent intent = null;
     private boolean lockOn;
     private JSONObject nestData;
+    private boolean faceRecon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class SetLock extends AppCompatActivity {
         setContentView(R.layout.activity_set_lock);
         intent= getIntent();
         lockOn = intent.getExtras().getBoolean("lock");
+        faceRecon = intent.getExtras().getBoolean("faceRecon");
         try {
             nestData = new JSONObject(intent.getStringExtra("nestData"));
         }
@@ -53,7 +55,6 @@ public class SetLock extends AppCompatActivity {
             lockSwitch.setChecked(false);
         }
 
-
         lockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -65,9 +66,9 @@ public class SetLock extends AppCompatActivity {
                     Toast.makeText(getBaseContext(), "Door Locked", Toast.LENGTH_LONG).show();
                     lockOn = true;
                 } else {
-                    new OkidokeysSetLockAsyncTask().execute("lockOff");
+                    new OkidokeysSetLockAsyncTask().execute("lockOn");
                     Toast.makeText(getBaseContext(), "Door Unlocked", Toast.LENGTH_LONG).show();
-                    lockOn = false;
+                    lockOn = false;;
                 }
 
 
@@ -92,8 +93,8 @@ public class SetLock extends AppCompatActivity {
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("nestData", nestData.toString());
         intent.putExtra("lock", lockOn);
+        intent.putExtra("faceRecon", faceRecon);
         startActivity(intent);
-
     }
 
 

@@ -46,7 +46,6 @@ public class AwayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_away);
         away_switch=(Switch) findViewById(R.id.awaySwitch);
         away_switch.setChecked(initial_away_status);
-
         final Switch awayModeSwitch = away_switch;
         awayModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -58,9 +57,6 @@ public class AwayActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e(null, "Some Json exception");
                 }
-
-
-
                 if(awayModeSwitch.isChecked()) {
                     new NestAwayAsyncTask().execute("on");
                     Toast.makeText(getBaseContext(), "Away mode is set", Toast.LENGTH_LONG).show();
@@ -90,6 +86,8 @@ public class AwayActivity extends AppCompatActivity {
     public void returnToMain(View v){
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("nestData", nestData.toString());
+        intent.putExtra("lock", false);
+        intent.putExtra("faceRecon", false);
         startActivity(intent);
 
     }

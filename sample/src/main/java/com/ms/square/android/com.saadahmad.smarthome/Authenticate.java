@@ -40,6 +40,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import android.media.MediaPlayer;
 
 /**
  * Created by Saad Ahmad on 8/28/2015.
@@ -126,6 +127,7 @@ public class Authenticate extends ActionBarActivity implements View.OnClickListe
             Bundle extras = new Bundle();
             extras.putString("nestData", myresult);
             extras.putBoolean("lock", lockOn);
+            extras.putBoolean("faceRecon", false); ///default at start of app to false.
             intent.putExtras(extras);
             startActivity(intent);
             //imageView.setImageBitmap(bmp);

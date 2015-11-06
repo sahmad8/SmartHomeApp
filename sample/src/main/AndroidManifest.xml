@@ -60,6 +60,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".com.saadahmad.smarthome.FacialRecon"
+            android:label="Face Recognizer" >
+            <intent-filter>
+                <action android:name="android.intent.action.FACESTATUS" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -50,6 +50,8 @@ public class SetTemp extends AppCompatActivity  {
     private JSONObject nestData;
     private int targetTemperature = 75;
     HttpResponse response;
+    private boolean lock;
+    private boolean faceRecon;
 
 
 
@@ -252,6 +254,7 @@ public class SetTemp extends AppCompatActivity  {
     public void returnToMain(View v){
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("nestData", nestData.toString());
+        intent.putExtra("faceRecon", false);
         startActivity(intent);
     }
     private class MyAsyncTask extends AsyncTask<String, Integer, Double> {
