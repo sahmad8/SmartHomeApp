@@ -21,7 +21,7 @@ import com.ms.square.android.R;
 /**
  * Created by shark89fish on 11/2/15.
  */
-public class RSBlurFragment extends Fragment {
+public class RSBlurFragment extends android.support.v4.app.Fragment{
     private ImageView image;
     private TextView text;
     private TextView statusText;
@@ -35,7 +35,7 @@ public class RSBlurFragment extends Fragment {
         applyBlur();
         return view;
     }
-
+    
     private void applyBlur() {
         image.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override

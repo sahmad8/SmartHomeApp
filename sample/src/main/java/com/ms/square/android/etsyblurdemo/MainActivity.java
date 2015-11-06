@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.app.FragmentTransaction;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity
     private Bundle extras = null;
     private boolean lockOn;
     Switch away_switch=null;
-
+    Bundle instance;
 
 
     /**
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        instance = savedInstanceState;
         intent= getIntent();
         extras = intent.getExtras();
         json_String = extras.getString("nestData");
@@ -87,11 +89,18 @@ public class MainActivity extends AppCompatActivity
         System.out.println("YYYYYYYYY");
         System.out.println(lockOn);
 
-        RSBlurFragment ft = new RSBlurFragment();
-        super.onCreate
+        RSBlurFragment frag = new RSBlurFragment();
 
+//        getSupportFragmentManager().executePendingTransactions();
+        super.onCreate(savedInstanceState);
 
-                (savedInstanceState);
+//        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//// Replace the contents of the container with the new fragment
+//        ft.replace(R.id.shell, frag);
+//// or ft.add(R.id.your_placeholder, new FooFragment());
+//// Complete the changes added above
+//        ft.commit();
+
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -175,6 +184,7 @@ public class MainActivity extends AppCompatActivity
 //        timer.schedule(doAsynchronousTask, 0, 50000); //execute in every 50000 ms
 
     }
+
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
