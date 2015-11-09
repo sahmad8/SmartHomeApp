@@ -158,8 +158,10 @@ public class MainActivity extends AppCompatActivity
                             }
                             if (changed) {
                                     mp3_notify_known.start();
-                                    Toast.makeText(getBaseContext(), personatmydoor + " is at ur door!!", Toast.LENGTH_LONG).show();
-                                    new OkidokeysSetLockAsyncTask().execute("lockOn");
+                                    Toast.makeText(getBaseContext(), personatmydoor + " is at your door!!", Toast.LENGTH_LONG).show();
+                                    if(lockOn) {
+                                        new OkidokeysSetLockAsyncTask().execute("lockOn");
+                                    }
                             }
                             handler.removeCallbacks(this);
                         }
@@ -414,7 +416,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intrude);
                 return null;
             }
-            if (faceRecon)
+            else if (faceRecon)
             {
                 InputStream inputStream = null;
                 StringBuilder builder=new StringBuilder();
