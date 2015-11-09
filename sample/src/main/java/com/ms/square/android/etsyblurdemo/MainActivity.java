@@ -125,11 +125,14 @@ public class MainActivity extends AppCompatActivity
         StringBuilder display = new StringBuilder();
         try {
             nestData = new JSONObject(intent.getStringExtra("nestData"));
-            Toast.makeText(this, "The target is "+ nestData.getString("target") , Toast.LENGTH_LONG).show();
             display.append("Current Temperature: ");
-            display.append(nestData.getString("temperature") + "\n");
+            double temp = Double.parseDouble(nestData.getString("temperature"));
+            String result = String.format("%.2f", temp);
+            display.append(result + "\n");
             display.append("Target Temperature: ");
-            display.append(nestData.getString("target") + "\n\n");
+            temp = Double.parseDouble(nestData.getString("target"));
+            result = String.format("%.2f", temp);
+            display.append(result + "\n");
             display.append("Away status: "+nestData.getString("away"));
             away_mode=nestData.getBoolean("away");
         }catch (JSONException e) {
@@ -203,7 +206,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        Toast.makeText(MainActivity.this, ""+position, Toast.LENGTH_SHORT).show();//debugging purposes
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))

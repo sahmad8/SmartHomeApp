@@ -30,9 +30,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Set Thermostat Temp"
+        android:textColor="@android:color/darker_gray"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/fanMode"
-        android:layout_marginTop="27dp" />
+        android:layout_toEndOf="@+id/buttonUp" />
     <!--<NumberPicker-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
@@ -106,8 +106,8 @@
         android:textColor="@color/bg_drawer"
         android:id="@+id/systemMode"
         android:layout_gravity="center"
-        android:layout_below="@+id/returnToMain"
-        android:layout_toEndOf="@+id/dataDisplay" />
+        android:layout_below="@+id/set"
+        android:layout_alignParentStart="true" />
         <!--</FrameLayout>-->
     <!--</ScrollView>-->
 </RelativeLayout>

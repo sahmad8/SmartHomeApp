@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Switch;
@@ -46,19 +47,20 @@ public class SetTemp extends AppCompatActivity  {
     private Button btn;
     private int maxTemp = 90;
     private int minTemp = 50;
-    private String myresult= null;
+    private String myresult = null;
     private JSONObject nestData;
     private int targetTemperature = 75;
     HttpResponse response;
     private boolean lock;
     private boolean faceRecon;
+    private boolean nestGetFlag = true;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
+        nestGetFlag = true;
         new MyAsyncTask().execute("nah");
 
 
@@ -89,11 +91,11 @@ public class SetTemp extends AppCompatActivity  {
         StringBuilder display = new StringBuilder();
 
         // display nestDat on screen
-        while(myresult == null){
+        while(nestGetFlag){
 
         }
         System.out.println("999999999999999");
-        System.out.println(nestData);
+
         final Switch fanModeSwitch = (Switch)  findViewById(R.id.fanMode);
         final Switch modeSwitch = (Switch)  findViewById(R.id.systemMode);
 
@@ -101,34 +103,63 @@ public class SetTemp extends AppCompatActivity  {
 
             nestData = new JSONObject(myresult);
             //nestData = new JSONObject(intent.getStringExtra("nestData"));
-            Toast.makeText(this, "The target is "+ nestData.getString("target") , Toast.LENGTH_LONG).show();
             display.append("Current Temperature: ");
-            display.append(nestData.getString("temperature") + "\n");
+            double temp = Double.parseDouble(nestData.getString("temperature"));
+            String result = String.format("%.2f", temp);
+            display.append(result + "\n");
             display.append("Target Temperature: ");
+            temp = Double.parseDouble(nestData.getString("target"));
+            targetTemperature = (int)temp;
+            result = String.format("%.2f", temp);
+            display.append(result + "\n");
+            display.append("Away status: "+nestData.getString("away"));
 
-            double targetTemp = Double.parseDouble(nestData.getString("target"));
-            targetTemperature  = (int)targetTemp;
-            display.append(targetTemperature + "\n");
 //            np.setValue(targetTemperature);
 
 
-            if(nestData.getString("fan").equals("false")){
-                fanModeSwitch.setChecked(false);
-            }
-            else{
-                fanModeSwitch.setChecked(true);
-            }
+
             ImageView background = (ImageView) findViewById(R.id.background);
-            if(nestData.getString("mode").equals("cool")){
-                modeSwitch.setChecked(false);
-                image = getResources().getDrawable(R.drawable.nest_cool);
+            TextView tempNum = (TextView) findViewById(R.id.tempDisplay);
+            Button setTemp = (Button) findViewById(R.id.set);
+            ImageButton up = (ImageButton) findViewById(R.id.buttonUp);
+            ImageButton down = (ImageButton) findViewById(R.id.buttonDown);
+
+            if(nestData.getString("away").equals("true")){
+                image = getResources().getDrawable(R.drawable.nest_away);
                 background.setImageDrawable(image);
+                modeSwitch.setEnabled(false);
+                fanModeSwitch.setEnabled(false);
+                setTemp.setEnabled(false);
+                down.setEnabled(false);
+                up.setEnabled(false);
+                tempNum.setVisibility(View.INVISIBLE);
             }
-            else{
-                modeSwitch.setChecked(true);
-                image = getResources().getDrawable(R.drawable.nest_heat);
-                background.setImageDrawable(image);
+            else {
+                modeSwitch.setEnabled(true);
+                fanModeSwitch.setEnabled(true);
+                setTemp.setEnabled(true);
+                down.setEnabled(true);
+                up.setEnabled(true);
+                tempNum.setVisibility(View.VISIBLE);
+
+
+                if (nestData.getString("mode").equals("cool")) {
+                    modeSwitch.setChecked(false);
+                    image = getResources().getDrawable(R.drawable.nest_cool);
+                    background.setImageDrawable(image);
+                } else {
+                    modeSwitch.setChecked(true);
+                    image = getResources().getDrawable(R.drawable.nest_heat);
+                    background.setImageDrawable(image);
+                }
+                if(nestData.getString("fan").equals("false")){
+                    fanModeSwitch.setChecked(false);
+                }
+                else{
+                    fanModeSwitch.setChecked(true);
+                }
             }
+            System.out.println(nestData);
 
             TextView tempDisplay = (TextView) findViewById(R.id.tempDisplay);
             tempDisplay.setText(String.valueOf(targetTemperature));
@@ -141,7 +172,7 @@ public class SetTemp extends AppCompatActivity  {
 
         dataDisplay.setText(display.toString());
 
-        
+
 
         fanModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -256,6 +287,7 @@ public class SetTemp extends AppCompatActivity  {
         intent.putExtra("nestData", nestData.toString());
         intent.putExtra("faceRecon", false);
         startActivity(intent);
+        myresult = null;
     }
     private class MyAsyncTask extends AsyncTask<String, Integer, Double> {
 
@@ -325,9 +357,11 @@ public class SetTemp extends AppCompatActivity  {
             e.printStackTrace();
         }
             System.out.println(nestData.toString());
+            nestGetFlag = false;
             return builder.toString();
 
         }
+
 
     }
 
