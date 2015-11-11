@@ -50,7 +50,7 @@ public class SetTemp extends AppCompatActivity  {
     private JSONObject nestData;
     private int targetTemperature = 75;
     HttpResponse response;
-    private boolean lock;
+    private boolean lockOn;
     private boolean faceRecon;
 
 
@@ -65,30 +65,14 @@ public class SetTemp extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_temp);
 
-//        np = (NumberPicker) findViewById(R.id.numberPicker);
         btn = (Button) findViewById(R.id.button1);
-//        np.setMaxValue(maxTemp);
-//        np.setMinValue(minTemp);
-        //btn.setOnClickListener(this);
-//        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-//        @Override
-//        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-//           setting=newVal;
-//        }
-//    });
-        //Bundle b =  getIntent().getExtras();
 
         Intent intent= getIntent();
-        //nestData = resetNestData(intent);
-
-
-
-
-
+        lockOn = intent.getExtras().getBoolean("lock");
+        faceRecon=intent.getExtras().getBoolean("faceRecon");
 
         StringBuilder display = new StringBuilder();
 
-        // display nestDat on screen
         while(myresult == null){
 
         }
@@ -217,34 +201,6 @@ public class SetTemp extends AppCompatActivity  {
         new NestSetTemperatureAsyncTask().execute(Integer.toString(setting));
         Toast.makeText(this, "Set Temperature to "+ setting /*np.getValue()*/, Toast.LENGTH_LONG).show();
 
-//        StringBuilder builder=new StringBuilder();
-//        HttpClient httpclient = new DefaultHttpClient();
-//        HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/nestSet?temperature=" + setting.toString());     //this is the url of our post servlet for our web application
-//        try {
-//            String paramstring="test hope this works";
-//            response = httpclient.execute(httppost);           //currently, no response is returned by webiste
-//            HttpEntity entity = response.getEntity();
-//            if(entity != null) {
-//                HttpEntity entity2 = response.getEntity();
-//                InputStream content = entity2.getContent();
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-//                String line;
-//                while((line = reader.readLine()) != null){
-//                    builder.append(line);
-//                }
-//                myresult=builder.toString();
-//            }
-//        } catch (ClientProtocolException e) {
-//            Log.e(null, "caught exception:CLIENT PROTO..");  //log for debugging in Android studio console.
-//        }
-//        catch (IOException e) {
-//            Log.e(null, "caught exception:IO EXCEP..");
-//        }
-//        catch (RuntimeException e) {
-//            Log.e(null, "caught exception:RUNTIME EXCEP...");
-//        }
-
-
     }
     public void setFan(){
         new NestSetFanAsyncTask().execute(Integer.toString(np.getValue()));
@@ -254,7 +210,8 @@ public class SetTemp extends AppCompatActivity  {
     public void returnToMain(View v){
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("nestData", nestData.toString());
-        intent.putExtra("faceRecon", false);
+        intent.putExtra("faceRecon", faceRecon);
+        intent.putExtra("lock", lockOn);
         startActivity(intent);
     }
     private class MyAsyncTask extends AsyncTask<String, Integer, Double> {

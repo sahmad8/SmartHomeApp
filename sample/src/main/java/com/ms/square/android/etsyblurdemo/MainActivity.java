@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity
     private boolean away_mode=false;
 
     private int targetTemperature = 75;
-    public String json_String= null;
     public String test=null;
     private JSONObject nestData;
     private Intent intent = null;
@@ -90,7 +89,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         intent= getIntent();
         extras = intent.getExtras();
-        json_String = extras.getString("nestData");
         lockOn = extras.getBoolean("lock");
         faceRecon = extras.getBoolean("faceRecon");
         System.out.println("YYYYYYYYY");
@@ -124,6 +122,14 @@ public class MainActivity extends AppCompatActivity
         TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
         dataDisplay.setText(display.toString());
         if (away_mode || faceRecon) {
+            if (away_mode)
+            {
+                faceRecon=false;
+            }
+            if (faceRecon)
+            {
+                away_mode=false;
+            }
             final Handler handler = new Handler();
             timer = new Timer();
             TimerTask doAsynchronousTask = new TimerTask() {
@@ -154,35 +160,6 @@ public class MainActivity extends AppCompatActivity
             System.out.println("About to schedule\n");
             timer.schedule(doAsynchronousTask, 0, 8000); //execute in every 50000 ms
         }
-//        //Toast.makeText(this, json_String, Toast.LENGTH_LONG).show();
-//        final Handler handler = new Handler();
-//        final PerformBackgroundTask performBackgroundTask = new PerformBackgroundTask();
-//        Timer timer = new Timer();
-//        TimerTask doAsynchronousTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                handler.post(new Runnable() {
-//                    public void run() {
-//                        try {
-//                            //updateDisplayData(intent);
-//                            // PerformBackgroundTask this class is the class that extends AsynchTask
-//                            performBackgroundTask.execute("dont matter");
-//                        } catch (Exception e) {
-//                            // TODO Auto-generated catch block
-//                        }
-//                        while(test==null){
-//
-//                        }
-//                        System.out.println("AJBDA"+test);
-//                    }
-//                });
-//            }
-//
-//        };
-//
-//
-//        timer.schedule(doAsynchronousTask, 0, 50000); //execute in every 50000 ms
-
     }
 
     @Override
@@ -397,7 +374,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intrude);
                 return null;
             }
-            if (faceRecon)
+            else if (faceRecon)
             {
                 InputStream inputStream = null;
                 StringBuilder builder=new StringBuilder();

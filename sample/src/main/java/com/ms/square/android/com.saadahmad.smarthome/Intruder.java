@@ -45,13 +45,14 @@ import android.os.Vibrator;
  */
 public class Intruder extends AppCompatActivity implements View.OnClickListener {
 
-    private final String password = "xilinx";
     private EditText value;
     private Button save_button;
     public String myresult=null;
     private ImageView imageView;
     private Bitmap bmp=null;
-    private String Target=null;
+    private boolean lockOn;
+    private boolean faceRecon;
+    private JSONObject nestData;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +62,16 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
         v.vibrate(2000);
 
         Intent intent = getIntent();
-        Target=intent.getStringExtra("Target");
         setContentView(R.layout.activity_intruder);
+        lockOn=intent.getExtras().getBoolean("lock");
+        faceRecon=intent.getExtras().getBoolean("faceRecon");
+        try{
+            nestData=new JSONObject(intent.getExtras().getString("nestData"));
+        }
+        catch(JSONException e)
+        {
+
+        }
         value = (EditText) findViewById(R.id.editText1);
         //btn = (Button) findViewById(R.id.button2);
         imageView = (ImageView) findViewById(R.id.imageSwitcher);
@@ -75,10 +84,7 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
 
         }
         imageView.setImageBitmap(bmp);
-       // new MyAsyncTask().execute("get the image");
-       // while (myresult==null) {
-         //   imageView.setImageBitmap(bmp);
-        //}
+        new DeleteIntruderImageAsyncTask().execute("delete image");
     }
 
     @Override
@@ -150,22 +156,14 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
         public String postData(String valueIWantToSend) {
             // Create new HttpClient and HTTPPOST
             try {
-                if (Target.equals("motion")) {
                     InputStream in = new URL("http://128.83.52.253:8079/imagetest.py/showImage").openStream();
                     bmp = BitmapFactory.decodeStream(in);
-                }
-                else {
-                    InputStream in = new URL("http://128.83.52.253:8079/imagetest.py/faceUknown").openStream();
-                    bmp = BitmapFactory.decodeStream(in);
-                }
-
             } catch (Exception e) {
                 Log.e(null, "caught exception something went wrong, this should not happen since we were guaranteed the image was there");
                 // log error
             }
             myresult="something";
             return null;
-
         }
     }
 

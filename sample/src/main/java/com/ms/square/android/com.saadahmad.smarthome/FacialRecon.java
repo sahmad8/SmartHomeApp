@@ -25,8 +25,7 @@ public class FacialRecon extends AppCompatActivity {
 
      private Intent intent;
      private Button face_button;
-     private Bundle extras;
-     private boolean face_recon;
+     private boolean faceRecon;
      private boolean lockOn;
      private JSONObject nestData;
 
@@ -36,8 +35,7 @@ public class FacialRecon extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_face_recon);
         intent=getIntent();
-        extras=intent.getExtras();
-        face_recon=extras.getBoolean("faceRecon");
+        faceRecon=intent.getExtras().getBoolean("faceRecon");
         lockOn = intent.getExtras().getBoolean("lock");
         try {
             nestData = new JSONObject(intent.getStringExtra("nestData"));
@@ -47,7 +45,7 @@ public class FacialRecon extends AppCompatActivity {
             Log.e(null, "Json exception caught");
         }
     final Switch faceSwitch = (Switch)  findViewById(R.id.faceSwitch);
-    if(face_recon){
+    if(faceRecon){
         faceSwitch.setChecked(true);
     }
     else{
@@ -59,10 +57,10 @@ public class FacialRecon extends AppCompatActivity {
             System.out.println("FACE");
             if (faceSwitch.isChecked()) {
                 Toast.makeText(getBaseContext(), "Facial Recon mode On", Toast.LENGTH_LONG).show();
-                face_recon = true;
+                faceRecon = true;
             } else {
                 Toast.makeText(getBaseContext(), "Facial Recon mode Off", Toast.LENGTH_LONG).show();
-                face_recon = false;;
+                faceRecon = false;;
             }
 
 
@@ -84,7 +82,7 @@ public class FacialRecon extends AppCompatActivity {
 
     public void returnToMain(View v){
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
-        intent.putExtra("faceRecon", face_recon);
+        intent.putExtra("faceRecon", faceRecon);
         intent.putExtra("nestData", nestData.toString());
         intent.putExtra("lock", lockOn);
         startActivity(intent);
