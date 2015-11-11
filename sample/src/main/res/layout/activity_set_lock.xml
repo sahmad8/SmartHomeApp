@@ -20,13 +20,13 @@
                 android:src="@drawable/lock"/>
             <Switch
                 android:layout_width="wrap_content"
-                android:layout_height="150sp"
                 android:text="Lock"
-                android:textColor="@android:color/holo_blue_dark"
+                android:layout_marginTop="40dp"
+                android:textColor="#FFFF00"
                 android:textStyle="bold"
                 android:textSize="50sp"
                 android:id="@+id/lockSwitch"
-                android:layout_marginTop="@android:dimen/thumbnail_height"
+                android:layout_height="wrap_content"
                 android:shadowColor="#A8A8A8"
                 android:shadowDx="1"
                 android:shadowDy="1"
@@ -36,7 +36,6 @@
                 android:checked="false" />
             <Button
                 android:id="@+id/returnToMain"
-                android:layout_below="@+id/lockSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"

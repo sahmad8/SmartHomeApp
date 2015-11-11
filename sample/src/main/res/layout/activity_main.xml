@@ -29,10 +29,10 @@
     <TextView
         android:id="@+id/dataDisplay"
         android:textSize="20dp"
-        android:textColor="@color/bg_drawer"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:textAppearance="@style/CodeFont"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="46dp" />
 

@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Set Thermostat Temp"
-        android:textColor="@android:color/darker_gray"
+        android:textAppearance="@style/GenericGray"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/buttonUp" />
     <!--<NumberPicker-->

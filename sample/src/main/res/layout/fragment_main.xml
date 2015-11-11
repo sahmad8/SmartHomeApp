@@ -18,15 +18,6 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/home"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Home Status Summary::"
-                android:textColor="@color/bg_drawer"
-                android:id="@+id/text_Nest"
-                android:layout_gravity="left|top" />
-
             <LinearLayout
                 android:id="@+id/controls"
                 android:layout_width="match_parent"
@@ -34,6 +25,15 @@
                 android:background="#7f000000"
                 android:orientation="vertical"
                 android:layout_gravity="bottom"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:textAppearance="@style/CodeFont"
+                android:text="::Home Status Summary::"
+                android:id="@+id/text_Nest"
+                android:layout_gravity="center_horizontal|top" />
             <!--<fragment-->
                 <!--android:id="@+id/shell"-->
                 <!--android:layout_width="match_parent"-->
