@@ -57,13 +57,12 @@ public class FacialRecon extends AppCompatActivity {
             System.out.println("FACE");
             if (faceSwitch.isChecked()) {
                 Toast.makeText(getBaseContext(), "Facial Recon mode On", Toast.LENGTH_LONG).show();
+                //new HomeStatusResetAsyncTask().execute("Resetting home status");
                 faceRecon = true;
             } else {
                 Toast.makeText(getBaseContext(), "Facial Recon mode Off", Toast.LENGTH_LONG).show();
                 faceRecon = false;;
             }
-
-
         }
 
     });
@@ -81,6 +80,7 @@ public class FacialRecon extends AppCompatActivity {
     }
 
     public void returnToMain(View v){
+        new HomeStatusResetAsyncTask().execute("Resetting home status");
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("faceRecon", faceRecon);
         intent.putExtra("nestData", nestData.toString());

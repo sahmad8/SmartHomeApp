@@ -34,6 +34,7 @@ import com.ms.square.android.com.saadahmad.smarthome.OkidokeysSetLockAsyncTask;
 import com.ms.square.android.com.saadahmad.smarthome.RSBlurFragment;
 import com.ms.square.android.com.saadahmad.smarthome.SetLock;
 import com.ms.square.android.com.saadahmad.smarthome.SetTemp;
+import com.ms.square.android.com.saadahmad.smarthome.Unrecognized;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -65,8 +66,8 @@ public class MainActivity extends AppCompatActivity
     private JSONObject nestData;
     private Intent intent = null;
     private Bundle extras = null;
-    private boolean lockOn;
-    private boolean faceRecon;
+    private boolean lockOn = false;
+    private boolean faceRecon = false;
     Switch away_switch=null;
     public MediaPlayer mp3_notify_known;
     public MediaPlayer mp3_notify_uknown;
@@ -370,9 +371,11 @@ public class MainActivity extends AppCompatActivity
                 }
                 test = "GOT IT";
                 timer.cancel();
-                Intent intrude=new Intent(activity.getBaseContext(), Intruder.class);
-                intrude.putExtra("Target", "motion");
-                startActivity(intrude);
+                Intent intruder=new Intent(activity.getBaseContext(), Intruder.class);
+                intruder.putExtra("lock", lockOn);
+                intruder.putExtra("faceRecon", faceRecon);
+                intruder.putExtra("nestData", nestData.toString());
+                startActivity(intruder);
                 return null;
             }
             else if (faceRecon)
@@ -406,7 +409,12 @@ public class MainActivity extends AppCompatActivity
                 }
                 changed=false;
                // personatmydoor=builder.toString();
-                if (personatmydoor.toString().equals(builder.toString()))
+                if (builder.toString().equals("Reset"))    //noone at the door.
+                {
+                    changed=false;
+                    return null;
+                }
+                if (personatmydoor.toString().equals(builder.toString()))  //its the same person.
                 {
                     return null;
                 }
@@ -414,8 +422,10 @@ public class MainActivity extends AppCompatActivity
                 if (personatmydoor.toString().equals("Unknown"))
                 {
                     timer.cancel();
-                    Intent myintent=new Intent(activity, Intruder.class);
-                    myintent.putExtra("Target", "face");
+                    Intent myintent=new Intent(activity, Unrecognized.class);
+                    myintent.putExtra("lock", lockOn);
+                    myintent.putExtra("faceRecon", faceRecon);
+                    myintent.putExtra("nestData", nestData.toString());
                     startActivity(myintent);
                 }
                 changed=true;
@@ -424,7 +434,6 @@ public class MainActivity extends AppCompatActivity
             return null;
         }
     }
-
 
 
 }

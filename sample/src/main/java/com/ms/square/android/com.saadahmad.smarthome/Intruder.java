@@ -84,7 +84,6 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
 
         }
         imageView.setImageBitmap(bmp);
-        new DeleteIntruderImageAsyncTask().execute("delete image");
     }
 
     @Override
@@ -116,6 +115,7 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
 
     public void returnToMainFromIntruder(View v){
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
+        new DeleteIntruderImageAsyncTask().execute("delete image");
         intent.putExtra("nestData", nestData.toString());
         intent.putExtra("lock", lockOn);
         intent.putExtra("faceRecon", faceRecon);

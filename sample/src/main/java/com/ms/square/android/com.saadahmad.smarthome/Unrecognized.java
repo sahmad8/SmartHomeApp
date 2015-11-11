@@ -44,7 +44,7 @@ public class Unrecognized extends AppCompatActivity {
         v.vibrate(2000);
         Toast.makeText(getBaseContext(), "Unrecognized person at your door", Toast.LENGTH_LONG);
         Intent intent = getIntent();
-        lockOn=intent.getExtras().getBoolean("lockOn");
+        lockOn=intent.getExtras().getBoolean("lock");
         faceRecon=intent.getExtras().getBoolean("faceRecon");
         try {
             nestData=new JSONObject(intent.getExtras().getString("nestData"));
@@ -60,7 +60,7 @@ public class Unrecognized extends AppCompatActivity {
 
     }
 
-    public void allowUnkown(View v){
+    public void allowUnknown(View v){
         if (lockOn)    //if door is locked, then only we need to toggle the lock and allow the person.
         {
             new OkidokeysSetLockAsyncTask().execute("unlock");
@@ -73,6 +73,7 @@ public class Unrecognized extends AppCompatActivity {
     }
 
     public void returnToMainFromUnrecognized(View v){
+        new HomeStatusResetAsyncTask().execute("Already seen");  //we have already seen the unknown person, reset home
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("nestData", nestData.toString());
         intent.putExtra("lock", lockOn);

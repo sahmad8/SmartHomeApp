@@ -90,11 +90,11 @@ public class AwayActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void returnToMain(View v){
+        new DeleteIntruderImageAsyncTask().execute("delete before we begin pinging");
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("nestData", nestData.toString());
         intent.putExtra("lock", lockOn);
         intent.putExtra("faceRecon", faceRecon);
         startActivity(intent);
-
     }
 }

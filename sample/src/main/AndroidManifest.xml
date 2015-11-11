@@ -68,6 +68,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".com.saadahmad.smarthome.Unrecognized"
+            android:label="Face Recognizer" >
+            <intent-filter>
+                <action android:name="android.intent.action.UNRECOGN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
