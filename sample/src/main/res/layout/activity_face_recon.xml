@@ -23,7 +23,7 @@
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="50sp"
-                android:textColor="#FFFF00"
+                android:textColor="#00FF00"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:id="@+id/faceSwitch"
