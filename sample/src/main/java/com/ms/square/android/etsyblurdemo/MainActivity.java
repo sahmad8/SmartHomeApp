@@ -186,6 +186,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 intent.putExtra("nestData", nestData.toString());
                 intent.putExtra("lock", lockOn);
+                intent.putExtra("faceRecon", faceRecon);
                 startActivity(intent);
                 break;
             case 3:

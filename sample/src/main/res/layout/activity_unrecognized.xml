@@ -12,7 +12,7 @@
         android:layout_gravity="center_horizontal|center_vertical" />
 
     <Button
-        android:onClick="returnToMain"
+        android:onClick="returnToMainFromUnrecognized"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Return"

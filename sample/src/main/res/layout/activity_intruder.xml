@@ -16,7 +16,16 @@
         android:layout_height="wrap_content"
         android:text="Save"
         android:id="@+id/button_save"
-        android:layout_marginBottom="84dp"
+        android:layout_marginBottom="84sp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Return"
+        android:id="@+id/Return_Intruder"
+        android:onClick="returnToMainFromIntruder"
+        android:layout_marginBottom="32sp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 

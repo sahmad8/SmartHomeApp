@@ -61,7 +61,7 @@ public class Unrecognized extends AppCompatActivity {
     }
 
     public void allowUnkown(View v){
-        if (lockOn)    //if door is locked, then only we need to toggle the lock.
+        if (lockOn)    //if door is locked, then only we need to toggle the lock and allow the person.
         {
             new OkidokeysSetLockAsyncTask().execute("unlock");
             Toast.makeText(getBaseContext(), "Door Unlocked.", Toast.LENGTH_LONG);
@@ -69,6 +69,7 @@ public class Unrecognized extends AppCompatActivity {
             return;
         }
         Toast.makeText(getBaseContext(),"Door is already Unlocked!!", Toast.LENGTH_LONG);
+        return;
     }
 
     public void returnToMainFromUnrecognized(View v){

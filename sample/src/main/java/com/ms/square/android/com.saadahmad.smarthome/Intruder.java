@@ -107,11 +107,21 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
      *
      * @param view
      */
-    public void onClick(View view) {
+    public void onClick(View view) { //click listener for save button
 
-            MediaStore.Images.Media.insertImage(getContentResolver(), bmp, "Intruder", "Image taken when home status was sset to away");
+            MediaStore.Images.Media.insertImage(getContentResolver(), bmp, "Intruder", "Image taken when home status was set to away");
             Toast.makeText(this, "Image saved", Toast.LENGTH_LONG).show();
         }
+
+
+    public void returnToMainFromIntruder(View v){
+        final Intent intent=new Intent(getBaseContext(), MainActivity.class);
+        intent.putExtra("nestData", nestData.toString());
+        intent.putExtra("lock", lockOn);
+        intent.putExtra("faceRecon", faceRecon);
+        startActivity(intent);
+    }
+
 
     /**
      * Asynchornous subclass, MyAsyncTask

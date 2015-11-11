@@ -30,11 +30,17 @@ public class AwayActivity extends AppCompatActivity {
     private Switch away_switch=null;
     private boolean initial_away_status;
     private JSONObject nestData;
+    private boolean lockOn;
+    private boolean faceRecon;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
+        lockOn=intent.getExtras().getBoolean("lock");
+        faceRecon=intent.getExtras().getBoolean("faceRecon");
         try {
             nestData = new JSONObject(intent.getStringExtra("nestData"));
             initial_away_status=nestData.getBoolean("away");
@@ -86,8 +92,8 @@ public class AwayActivity extends AppCompatActivity {
     public void returnToMain(View v){
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("nestData", nestData.toString());
-        intent.putExtra("lock", false);
-        intent.putExtra("faceRecon", false);
+        intent.putExtra("lock", lockOn);
+        intent.putExtra("faceRecon", faceRecon);
         startActivity(intent);
 
     }
