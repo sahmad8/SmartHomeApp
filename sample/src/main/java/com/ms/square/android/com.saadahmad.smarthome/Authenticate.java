@@ -214,7 +214,7 @@ public class Authenticate extends ActionBarActivity implements View.OnClickListe
                 Log.e(null, "caught exception:RUNTIME EXCEP...");
             }
             System.out.println("++++++++++++");
-            System.out.println(myresult);
+            //System.out.println(myresult);
             return builder.toString();
         }
     }

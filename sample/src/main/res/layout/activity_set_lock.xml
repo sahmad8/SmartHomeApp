@@ -24,6 +24,7 @@
                 android:layout_marginTop="40dp"
                 android:textColor="#FFFF00"
                 android:textStyle="bold"
+                android:thumb="@drawable/apptheme_switch_track_holo_light"
                 android:textSize="50sp"
                 android:id="@+id/lockSwitch"
                 android:layout_height="wrap_content"
