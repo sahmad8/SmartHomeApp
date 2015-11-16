@@ -127,13 +127,15 @@ public class MainActivity extends AppCompatActivity
             nestData = new JSONObject(intent.getStringExtra("nestData"));
             display.append("Current Temperature: ");
             double temp = Double.parseDouble(nestData.getString("temperature"));
-            String result = String.format("%.0f", temp);
+            String result = String.format("%.1f", temp);
             display.append(result + "\n");
             display.append("Target Temperature: ");
             temp = Double.parseDouble(nestData.getString("target"));
-            result = String.format("%.0f", temp);
+            result = String.format("%.1f", temp);
             display.append(result + "\n");
             display.append("Away status: "+nestData.getString("away"));
+            display.append("\n");
+            display.append("Lock status: "+ lockOn);
             away_mode=nestData.getBoolean("away");
         }catch (JSONException e) {
             e.printStackTrace();
@@ -158,7 +160,7 @@ public class MainActivity extends AppCompatActivity
                             }
                             if (changed) {
                                     mp3_notify_known.start();
-                                    Toast.makeText(getBaseContext(), personatmydoor + " is at your door!!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getBaseContext(), personatmydoor + " is at your door!!", Toast.LENGTH_LONG).show();
                                     if(lockOn) {
                                         new OkidokeysSetLockAsyncTask().execute("lockOn");
                                     }

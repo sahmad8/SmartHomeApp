@@ -105,12 +105,12 @@ public class SetTemp extends AppCompatActivity  {
             //nestData = new JSONObject(intent.getStringExtra("nestData"));
             display.append("Current Temperature: ");
             double temp = Double.parseDouble(nestData.getString("temperature"));
-            String result = String.format("%.2f", temp);
+            String result = String.format("%.1f", temp);
             display.append(result + "\n");
             display.append("Target Temperature: ");
             temp = Double.parseDouble(nestData.getString("target"));
             targetTemperature = (int)temp;
-            result = String.format("%.2f", temp);
+            result = String.format("%.1f", temp);
             display.append(result + "\n");
             display.append("Away status: "+nestData.getString("away"));
 
@@ -248,6 +248,31 @@ public class SetTemp extends AppCompatActivity  {
         new NestSetTemperatureAsyncTask().execute(Integer.toString(setting));
         Toast.makeText(this, "Set Temperature to "+ setting /*np.getValue()*/, Toast.LENGTH_LONG).show();
 
+        StringBuilder display = new StringBuilder();
+
+        try {
+
+            nestData.put("target" , String.valueOf(setting));
+            //nestData = new JSONObject(intent.getStringExtra("nestData"));
+            display.append("Current Temperature: ");
+            double temp = Double.parseDouble(nestData.getString("temperature"));
+            String result = String.format("%.1f", temp);
+            display.append(result + "\n");
+            display.append("Target Temperature: ");
+            temp = Double.parseDouble(nestData.getString("target"));
+            targetTemperature = (int) temp;
+            result = String.format("%.1f", temp);
+            display.append(result + "\n");
+            display.append("Away status: " + nestData.getString("away"));
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
+
+        dataDisplay.setText(display.toString());
+
 //        StringBuilder builder=new StringBuilder();
 //        HttpClient httpclient = new DefaultHttpClient();
 //        HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/nestSet?temperature=" + setting.toString());     //this is the url of our post servlet for our web application
@@ -285,7 +310,7 @@ public class SetTemp extends AppCompatActivity  {
     public void returnToMain(View v){
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("nestData", nestData.toString());
-        intent.putExtra("faceRecon", false);
+        intent.putExtra("faceRecon", false);//Is this a problem???
         startActivity(intent);
         myresult = null;
     }
