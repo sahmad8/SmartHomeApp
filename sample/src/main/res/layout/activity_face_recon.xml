@@ -23,8 +23,10 @@
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="50sp"
-                android:textColor="#00FF00"
+                android:textColor="#FFDD00"
+                android:switchTextAppearance="@style/SwitchTextAppearance"
                 android:textStyle="bold"
+                android:thumb="@drawable/apptheme_switch_track_holo_light"
                 android:textSize="20sp"
                 android:id="@+id/faceSwitch"
                 android:text="Face Recognition Mode"

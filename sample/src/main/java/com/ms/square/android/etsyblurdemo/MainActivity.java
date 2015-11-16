@@ -127,11 +127,11 @@ public class MainActivity extends AppCompatActivity
             nestData = new JSONObject(intent.getStringExtra("nestData"));
             display.append("Current Temperature: ");
             double temp = Double.parseDouble(nestData.getString("temperature"));
-            String result = String.format("%.2f", temp);
+            String result = String.format("%.0f", temp);
             display.append(result + "\n");
             display.append("Target Temperature: ");
             temp = Double.parseDouble(nestData.getString("target"));
-            result = String.format("%.2f", temp);
+            result = String.format("%.0f", temp);
             display.append(result + "\n");
             display.append("Away status: "+nestData.getString("away"));
             away_mode=nestData.getBoolean("away");

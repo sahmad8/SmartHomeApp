@@ -9,8 +9,8 @@
 
     <color name="ksw_md_solid_shadow">#33000000</color>
 
-    <color name="ksw_md_solid_normal">#ECECEC</color>
-    <color name="ksw_md_solid_checked">#019285</color>
+    <color name="ksw_md_solid_normal">#888888</color>
+    <color name="ksw_md_solid_checked">#0099FF</color>
     <color name="ksw_md_solid_disable">#FF0000</color>
     <color name="ksw_md_solid_checked_disable">#aaaaaa</color>
 </resources>
