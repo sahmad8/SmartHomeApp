@@ -1,11 +1,7 @@
 package com.ms.square.android.etsyblurdemo;
 
 import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,6 +30,8 @@ import com.ms.square.android.com.saadahmad.smarthome.OkidokeysSetLockAsyncTask;
 import com.ms.square.android.com.saadahmad.smarthome.RSBlurFragment;
 import com.ms.square.android.com.saadahmad.smarthome.SetLock;
 import com.ms.square.android.com.saadahmad.smarthome.SetTemp;
+import com.ms.square.android.com.saadahmad.smarthome.StartFaceAsyncTask;
+import com.ms.square.android.com.saadahmad.smarthome.StartMotionAsyncTask;
 import com.ms.square.android.com.saadahmad.smarthome.Unrecognized;
 
 import org.apache.http.HttpEntity;
@@ -125,10 +123,12 @@ public class MainActivity extends AppCompatActivity
         if (away_mode || faceRecon) {
             if (away_mode)
             {
+                new StartMotionAsyncTask().execute("start motion");
                 faceRecon=false;
             }
-            if (faceRecon)
+            else if (faceRecon)
             {
+                new StartFaceAsyncTask().execute("start facial recon");
                 away_mode=false;
             }
             final Handler handler = new Handler();
@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity
                     timer.cancel();
                     timer = null;
                 }
+
                 intent.putExtra("nestData", nestData.toString());
                 intent.putExtra("lock", lockOn);
                 intent.putExtra("faceRecon", faceRecon);
