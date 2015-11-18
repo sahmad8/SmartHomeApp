@@ -50,7 +50,7 @@ import android.media.MediaPlayer;
  */
 public class Authenticate extends ActionBarActivity implements View.OnClickListener {
 
-    private final String password = "";
+    private final String password = "xilinx";
     private EditText value;
     private Button btn;
     private ProgressBar pb;
