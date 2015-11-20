@@ -1,23 +1,19 @@
 package com.ms.square.android.com.saadahmad.smarthome;
 
 import android.os.AsyncTask;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 
 /**
- * Created by Saad Ahmad on 10/21/2015.
+ * Created by Saad Ahmad on 11/18/2015.
  */
-public class DeleteIntruderImageAsyncTask extends AsyncTask<String, Integer, Double> {
+public class KillFaceAsyncTask extends AsyncTask<String, Integer, Double> {
 
     HttpResponse response;
 
@@ -39,15 +35,6 @@ public class DeleteIntruderImageAsyncTask extends AsyncTask<String, Integer, Dou
     }
 
     /**
-     * onProgressUpdate-
-     * updates progress bar
-     * @param progress
-     */
-    protected void onProgressUpdate(Integer... progress) {
-
-    }
-
-    /**
      * poData-handles http actions
      * called when user clicks submit-then asynchronous task is created and calls this method
      * Uses http address of our servlet code for onPost (for our webapplciation which holds all the scores)
@@ -57,9 +44,11 @@ public class DeleteIntruderImageAsyncTask extends AsyncTask<String, Integer, Dou
         // Create new HttpClient and HTTPPOST
 
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://128.83.52.253:8079/imagetest.py/deleteImage");     //this is the url of our post servlet for our web application
+
+        HttpPost httppost = new HttpPost("http://128.83.52.253:8079/imagetest.py/killFace");     //this is the url of our post servlet for our web application
         try {
-            response = httpclient.execute(httppost);
+            response = httpclient.execute(httppost);           //currently, no response is returned by webiste
+
         } catch (ClientProtocolException e) {
 
         }
@@ -70,5 +59,4 @@ public class DeleteIntruderImageAsyncTask extends AsyncTask<String, Integer, Dou
         }
         return "no string";
     }
-
 }

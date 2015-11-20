@@ -81,6 +81,8 @@ public class Authenticate extends ActionBarActivity implements View.OnClickListe
         pb.setVisibility(View.GONE);
         btn.setOnClickListener(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        new HomeStatusResetAsyncTask().execute("Reset home b4 we start demoing");
+        new DeleteIntruderImageAsyncTask().execute("Delete image before we start showing the app");
     }
 
     @Override
@@ -175,17 +177,6 @@ public class Authenticate extends ActionBarActivity implements View.OnClickListe
          */
         public String postData(String valueIWantToSend) {
             // Create new HttpClient and HTTPPOST
-/*   This commented code returns an image stored on the server.
-            try {
-                InputStream in = new URL("http://128.83.190.58/test.py/nestGet").openStream();
-                bmp = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e(null, "caught exception");
-                // log error
-            }
-            myresult="GOT IT";
-            return null;
-*/
             InputStream inputStream = null;
             StringBuilder builder=new StringBuilder();
             HttpClient httpclient = new DefaultHttpClient();

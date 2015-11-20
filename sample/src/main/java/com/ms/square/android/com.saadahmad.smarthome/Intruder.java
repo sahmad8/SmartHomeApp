@@ -45,13 +45,14 @@ import android.os.Vibrator;
  */
 public class Intruder extends AppCompatActivity implements View.OnClickListener {
 
-    private final String password = "xilinx";
     private EditText value;
     private Button save_button;
     public String myresult=null;
     private ImageView imageView;
     private Bitmap bmp=null;
-    private String Target=null;
+    private boolean lockOn;
+    private boolean faceRecon;
+    private JSONObject nestData;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +62,16 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
         v.vibrate(2000);
 
         Intent intent = getIntent();
-        Target=intent.getStringExtra("Target");
         setContentView(R.layout.activity_intruder);
+        lockOn=intent.getExtras().getBoolean("lock");
+        faceRecon=intent.getExtras().getBoolean("faceRecon");
+        try{
+            nestData=new JSONObject(intent.getExtras().getString("nestData"));
+        }
+        catch(JSONException e)
+        {
+
+        }
         value = (EditText) findViewById(R.id.editText1);
         //btn = (Button) findViewById(R.id.button2);
         imageView = (ImageView) findViewById(R.id.imageSwitcher);
@@ -75,10 +84,6 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
 
         }
         imageView.setImageBitmap(bmp);
-       // new MyAsyncTask().execute("get the image");
-       // while (myresult==null) {
-         //   imageView.setImageBitmap(bmp);
-        //}
     }
 
     @Override
@@ -101,9 +106,9 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
      *
      * @param view
      */
-    public void onClick(View view) {
+    public void onClick(View view) { //click listener for save button
 
-            MediaStore.Images.Media.insertImage(getContentResolver(), bmp, "Intruder", "Image taken when home status was sset to away");
+            MediaStore.Images.Media.insertImage(getContentResolver(), bmp, "Intruder", "Image taken when home status was set to away");
             Toast.makeText(this, "Image saved", Toast.LENGTH_LONG).show();
     }
     public void returnToMenu(View v){
@@ -112,6 +117,17 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
 //        intent.putExtra("faceRecon", false);
         startActivity(intent);
     }
+
+
+    public void returnToMainFromIntruder(View v){
+        final Intent intent=new Intent(getBaseContext(), MainActivity.class);
+        new DeleteIntruderImageAsyncTask().execute("delete image");
+        intent.putExtra("nestData", nestData.toString());
+        intent.putExtra("lock", lockOn);
+        intent.putExtra("faceRecon", faceRecon);
+        startActivity(intent);
+    }
+
 
     /**
      * Asynchornous subclass, MyAsyncTask
@@ -156,22 +172,14 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
         public String postData(String valueIWantToSend) {
             // Create new HttpClient and HTTPPOST
             try {
-                if (Target.equals("motion")) {
                     InputStream in = new URL("http://128.83.52.253:8079/imagetest.py/showImage").openStream();
                     bmp = BitmapFactory.decodeStream(in);
-                }
-                else {
-                    InputStream in = new URL("http://128.83.52.253:8079/imagetest.py/faceUknown").openStream();
-                    bmp = BitmapFactory.decodeStream(in);
-                }
-
             } catch (Exception e) {
                 Log.e(null, "caught exception something went wrong, this should not happen since we were guaranteed the image was there");
                 // log error
             }
             myresult="something";
             return null;
-
         }
     }
 

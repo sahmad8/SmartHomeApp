@@ -32,13 +32,16 @@ public class AwayActivity extends AppCompatActivity {
     private JSONObject nestData;
     private boolean lockOn;
 
+    private boolean faceRecon;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        lockOn = intent.getExtras().getBoolean("lock");
 
-
+        lockOn=intent.getExtras().getBoolean("lock");
+        faceRecon=intent.getExtras().getBoolean("faceRecon");
 
         try {
             nestData = new JSONObject(intent.getStringExtra("nestData"));
@@ -93,11 +96,13 @@ public class AwayActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void returnToMain(View v){
+        new DeleteIntruderImageAsyncTask().execute("delete before we begin pinging");
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("nestData", nestData.toString());
         intent.putExtra("lock", lockOn);
-        intent.putExtra("faceRecon", false);///////////////FIX THIS
-        startActivity(intent);
 
+        intent.putExtra("faceRecon", faceRecon);
+
+        startActivity(intent);
     }
 }

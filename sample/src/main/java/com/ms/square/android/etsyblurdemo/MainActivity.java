@@ -1,11 +1,7 @@
 package com.ms.square.android.etsyblurdemo;
 
 import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,10 +27,15 @@ import com.ms.square.android.R;
 import com.ms.square.android.com.saadahmad.smarthome.AwayActivity;
 import com.ms.square.android.com.saadahmad.smarthome.FacialRecon;
 import com.ms.square.android.com.saadahmad.smarthome.Intruder;
+import com.ms.square.android.com.saadahmad.smarthome.KillFaceAsyncTask;
+import com.ms.square.android.com.saadahmad.smarthome.KillMotionAsyncTask;
 import com.ms.square.android.com.saadahmad.smarthome.OkidokeysSetLockAsyncTask;
 import com.ms.square.android.com.saadahmad.smarthome.RSBlurFragment;
 import com.ms.square.android.com.saadahmad.smarthome.SetLock;
 import com.ms.square.android.com.saadahmad.smarthome.SetTemp;
+import com.ms.square.android.com.saadahmad.smarthome.StartFaceAsyncTask;
+import com.ms.square.android.com.saadahmad.smarthome.StartMotionAsyncTask;
+import com.ms.square.android.com.saadahmad.smarthome.Unrecognized;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -62,13 +63,12 @@ public class MainActivity extends AppCompatActivity
     private boolean away_mode=false;
 
     private int targetTemperature = 75;
-    public String json_String= null;
     public String test=null;
     private JSONObject nestData;
     private Intent intent = null;
     private Bundle extras = null;
-    private boolean lockOn;
-    private boolean faceRecon;
+    private boolean lockOn = false;
+    private boolean faceRecon = false;
     Switch away_switch=null;
     Bundle instance;
     public MediaPlayer mp3_notify_known;
@@ -92,15 +92,11 @@ public class MainActivity extends AppCompatActivity
         instance = savedInstanceState;
         intent= getIntent();
         extras = intent.getExtras();
-        json_String = extras.getString("nestData");
         lockOn = extras.getBoolean("lock");
         faceRecon = extras.getBoolean("faceRecon");
         System.out.println("YYYYYYYYY");
         System.out.println(lockOn);
 
-        RSBlurFragment frag = new RSBlurFragment();
-
-//        getSupportFragmentManager().executePendingTransactions();
         super.onCreate(savedInstanceState);
 
 //        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -143,6 +139,16 @@ public class MainActivity extends AppCompatActivity
         TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
         dataDisplay.setText(display.toString());
         if (away_mode || faceRecon) {
+            if (away_mode)
+            {
+                new StartMotionAsyncTask().execute("start motion");
+                faceRecon=false;
+            }
+            else if (faceRecon)
+            {
+                new StartFaceAsyncTask().execute("start facial recon");
+                away_mode=false;
+            }
             final Handler handler = new Handler();
             timer = new Timer();
             TimerTask doAsynchronousTask = new TimerTask() {
@@ -175,35 +181,11 @@ public class MainActivity extends AppCompatActivity
             System.out.println("About to schedule\n");
             timer.schedule(doAsynchronousTask, 0, 8000); //execute in every 50000 ms
         }
-//        //Toast.makeText(this, json_String, Toast.LENGTH_LONG).show();
-//        final Handler handler = new Handler();
-//        final PerformBackgroundTask performBackgroundTask = new PerformBackgroundTask();
-//        Timer timer = new Timer();
-//        TimerTask doAsynchronousTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                handler.post(new Runnable() {
-//                    public void run() {
-//                        try {
-//                            //updateDisplayData(intent);
-//                            // PerformBackgroundTask this class is the class that extends AsynchTask
-//                            performBackgroundTask.execute("dont matter");
-//                        } catch (Exception e) {
-//                            // TODO Auto-generated catch block
-//                        }
-//                        while(test==null){
-//
-//                        }
-//                        System.out.println("AJBDA"+test);
-//                    }
-//                });
-//            }
-//
-//        };
-//
-//
-//        timer.schedule(doAsynchronousTask, 0, 50000); //execute in every 50000 ms
-
+        else
+        {
+           new KillFaceAsyncTask().execute("kill just in case");
+            new KillMotionAsyncTask().execute("kill in case its running");
+        }
     }
 
 
@@ -228,8 +210,10 @@ public class MainActivity extends AppCompatActivity
                     timer.cancel();
                     timer = null;
                 }
+
                 intent.putExtra("nestData", nestData.toString());
                 intent.putExtra("lock", lockOn);
+                intent.putExtra("faceRecon", faceRecon);
                 startActivity(intent);
                 break;
             case 3:
@@ -413,9 +397,11 @@ public class MainActivity extends AppCompatActivity
                 }
                 test = "GOT IT";
                 timer.cancel();
-                Intent intrude=new Intent(activity.getBaseContext(), Intruder.class);
-                intrude.putExtra("Target", "motion");
-                startActivity(intrude);
+                Intent intruder=new Intent(activity.getBaseContext(), Intruder.class);
+                intruder.putExtra("lock", lockOn);
+                intruder.putExtra("faceRecon", faceRecon);
+                intruder.putExtra("nestData", nestData.toString());
+                startActivity(intruder);
                 return null;
             }
             else if (faceRecon)
@@ -449,7 +435,12 @@ public class MainActivity extends AppCompatActivity
                 }
                 changed=false;
                // personatmydoor=builder.toString();
-                if (personatmydoor.toString().equals(builder.toString()))
+                if (builder.toString().equals("Reset"))    //noone at the door.
+                {
+                    changed=false;
+                    return null;
+                }
+                if (personatmydoor.toString().equals(builder.toString()))  //its the same person.
                 {
                     return null;
                 }
@@ -457,8 +448,10 @@ public class MainActivity extends AppCompatActivity
                 if (personatmydoor.toString().equals("Unknown"))
                 {
                     timer.cancel();
-                    Intent myintent=new Intent(activity, Intruder.class);
-                    myintent.putExtra("Target", "face");
+                    Intent myintent=new Intent(activity, Unrecognized.class);
+                    myintent.putExtra("lock", lockOn);
+                    myintent.putExtra("faceRecon", faceRecon);
+                    myintent.putExtra("nestData", nestData.toString());
                     startActivity(myintent);
                 }
                 changed=true;
@@ -467,7 +460,6 @@ public class MainActivity extends AppCompatActivity
             return null;
         }
     }
-
 
 
 }

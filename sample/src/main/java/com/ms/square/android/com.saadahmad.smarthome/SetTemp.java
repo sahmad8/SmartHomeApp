@@ -51,7 +51,7 @@ public class SetTemp extends AppCompatActivity  {
     private JSONObject nestData;
     private int targetTemperature = 75;
     HttpResponse response;
-    private boolean lock;
+    private boolean lockOn;
     private boolean faceRecon;
     private boolean nestGetFlag = true;
 
@@ -67,31 +67,17 @@ public class SetTemp extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_temp);
 
-//        np = (NumberPicker) findViewById(R.id.numberPicker);
         btn = (Button) findViewById(R.id.button1);
-//        np.setMaxValue(maxTemp);
-//        np.setMinValue(minTemp);
-        //btn.setOnClickListener(this);
-//        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-//        @Override
-//        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-//           setting=newVal;
-//        }
-//    });
-        //Bundle b =  getIntent().getExtras();
 
         Intent intent= getIntent();
-        //nestData = resetNestData(intent);
-
-
-
-
-
+        lockOn = intent.getExtras().getBoolean("lock");
+        faceRecon=intent.getExtras().getBoolean("faceRecon");
 
         StringBuilder display = new StringBuilder();
 
-        // display nestDat on screen
+
         while(nestGetFlag){
+
 
         }
         System.out.println("999999999999999");
@@ -301,6 +287,7 @@ public class SetTemp extends AppCompatActivity  {
 //        }
 
 
+
     }
     public void setFan(){
         new NestSetFanAsyncTask().execute(Integer.toString(np.getValue()));
@@ -310,7 +297,10 @@ public class SetTemp extends AppCompatActivity  {
     public void returnToMain(View v){
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("nestData", nestData.toString());
-        intent.putExtra("faceRecon", false);//Is this a problem???
+
+        intent.putExtra("faceRecon", faceRecon);
+        intent.putExtra("lock", lockOn);
+
         startActivity(intent);
         myresult = null;
     }
