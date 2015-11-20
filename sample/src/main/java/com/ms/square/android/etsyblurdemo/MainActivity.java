@@ -26,6 +26,8 @@ import com.ms.square.android.R;
 import com.ms.square.android.com.saadahmad.smarthome.AwayActivity;
 import com.ms.square.android.com.saadahmad.smarthome.FacialRecon;
 import com.ms.square.android.com.saadahmad.smarthome.Intruder;
+import com.ms.square.android.com.saadahmad.smarthome.KillFaceAsyncTask;
+import com.ms.square.android.com.saadahmad.smarthome.KillMotionAsyncTask;
 import com.ms.square.android.com.saadahmad.smarthome.OkidokeysSetLockAsyncTask;
 import com.ms.square.android.com.saadahmad.smarthome.RSBlurFragment;
 import com.ms.square.android.com.saadahmad.smarthome.SetLock;
@@ -93,7 +95,6 @@ public class MainActivity extends AppCompatActivity
         System.out.println("YYYYYYYYY");
         System.out.println(lockOn);
         System.out.println(faceRecon);
-        RSBlurFragment ft = new RSBlurFragment();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -161,12 +162,16 @@ public class MainActivity extends AppCompatActivity
             System.out.println("About to schedule\n");
             timer.schedule(doAsynchronousTask, 0, 8000); //execute in every 50000 ms
         }
+        else
+        {
+           new KillFaceAsyncTask().execute("kill just in case");
+            new KillMotionAsyncTask().execute("kill in case its running");
+        }
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        Toast.makeText(MainActivity.this, ""+position, Toast.LENGTH_SHORT).show();//debugging purposes
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
