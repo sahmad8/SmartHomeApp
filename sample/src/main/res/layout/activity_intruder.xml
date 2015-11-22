@@ -17,14 +17,14 @@
         android:text="Save"
         android:id="@+id/button_save"
         android:layout_marginBottom="92dp"
-
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Return"
-        android:id="@+id/returnToMenu"
+        android:onClick="returnToMainFromIntruder"
+        android:id="@+id/returnToMainFromIntruder"
         android:layout_alignTop="@+id/button_save"
         android:layout_alignParentEnd="true" />
 

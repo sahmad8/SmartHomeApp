@@ -1,6 +1,9 @@
 package com.ms.square.android.com.saadahmad.smarthome;
 
+import android.content.res.Resources;
 import android.os.AsyncTask;
+
+import com.ms.square.android.R;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;

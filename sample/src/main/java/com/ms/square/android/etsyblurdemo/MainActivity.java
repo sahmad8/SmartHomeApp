@@ -2,6 +2,7 @@ package com.ms.square.android.etsyblurdemo;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -53,6 +54,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends AppCompatActivity
@@ -179,7 +181,7 @@ public class MainActivity extends AppCompatActivity
 
             };
             System.out.println("About to schedule\n");
-            timer.schedule(doAsynchronousTask, 0, 8000); //execute in every 50000 ms
+            timer.schedule(doAsynchronousTask, 0, 8000); //execute in every 80000 ms
         }
         else
         {
@@ -388,7 +390,7 @@ public class MainActivity extends AppCompatActivity
             if (away_mode) {
                 try {
                     in = new URL("http://128.83.52.253:8079/imagetest.py/showImage").openStream();
-                    //bmp = BitmapFactory.decodeStream(in);
+                   // bmp = BitmapFactory.decodeStream(in);
                 } catch (Exception e) {
                     Log.e(null, "caught exception");
                     test = "Exception";
@@ -401,6 +403,13 @@ public class MainActivity extends AppCompatActivity
                 intruder.putExtra("lock", lockOn);
                 intruder.putExtra("faceRecon", faceRecon);
                 intruder.putExtra("nestData", nestData.toString());
+                try {
+                    TimeUnit.SECONDS.sleep(1);             //for race condition, make sure image file has been updated
+                }
+                catch (InterruptedException e)
+                {
+
+                }
                 startActivity(intruder);
                 return null;
             }

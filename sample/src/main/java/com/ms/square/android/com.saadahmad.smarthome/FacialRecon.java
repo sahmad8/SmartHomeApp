@@ -18,6 +18,8 @@ import com.ms.square.android.etsyblurdemo.MainActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by Saad Ahmad on 11/4/2015.
  */
@@ -81,6 +83,13 @@ public class FacialRecon extends AppCompatActivity {
 
     public void returnToMain(View v){
         new HomeStatusResetAsyncTask().execute("Resetting home status");
+        try {
+            TimeUnit.SECONDS.sleep(1);             //for race condition, make sure image file has been updated
+        }
+        catch (InterruptedException e)
+        {
+
+        }
         final Intent intent=new Intent(getBaseContext(), MainActivity.class);
         intent.putExtra("faceRecon", faceRecon);
         intent.putExtra("nestData", nestData.toString());

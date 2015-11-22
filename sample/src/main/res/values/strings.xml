@@ -9,7 +9,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_dialog">Status</string>
     <string name="title_activity_away">AwayActivity</string>
-
+    <string name="URLPATH">http://128.83.52.253:8079/</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 

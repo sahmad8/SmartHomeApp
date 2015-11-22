@@ -368,10 +368,14 @@ public class SetTemp extends AppCompatActivity  {
             System.out.println(myresult);
         try {
             nestData = new JSONObject(myresult);
+            System.out.println(nestData.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
-            System.out.println(nestData.toString());
+            catch (NullPointerException n)
+            {
+                System.out.println("null exception");
+            }
             nestGetFlag = false;
             return builder.toString();
 

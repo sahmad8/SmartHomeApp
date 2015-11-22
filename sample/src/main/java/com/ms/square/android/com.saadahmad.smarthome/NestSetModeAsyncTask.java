@@ -1,5 +1,6 @@
 package com.ms.square.android.com.saadahmad.smarthome;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -7,6 +8,8 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.ms.square.android.R;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
