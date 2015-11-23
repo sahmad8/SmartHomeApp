@@ -76,7 +76,7 @@ public class NestAwayAsyncTask extends AsyncTask<String, Integer, Double> {
         System.out.println("__________________________");
         System.out.println(valueIWantToSend);
 
-        HttpPost httppost = new HttpPost("http://128.83.52.253:8079/test.py/nestAway?mode="+valueIWantToSend);     //this is the url of our post servlet for our web application
+        HttpPost httppost = new HttpPost("http://146.6.65.98:8080/test.py/nestAway?mode="+valueIWantToSend);     //this is the url of our post servlet for our web application
         try {
             String paramstring="test hope this works";
             response = httpclient.execute(httppost);           //currently, no response is returned by webiste

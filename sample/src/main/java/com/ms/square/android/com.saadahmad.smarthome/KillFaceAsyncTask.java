@@ -48,7 +48,7 @@ public class KillFaceAsyncTask extends AsyncTask<String, Integer, Double> {
 
         HttpClient httpclient = new DefaultHttpClient();
 
-        HttpPost httppost = new HttpPost("http://128.83.52.253:8079/imagetest.py/killFace");     //this is the url of our post servlet for our web application
+        HttpPost httppost = new HttpPost("http://146.6.65.98:8080/imagetest.py/killFace");     //this is the url of our post servlet for our web application
         try {
             response = httpclient.execute(httppost);           //currently, no response is returned by webiste
 

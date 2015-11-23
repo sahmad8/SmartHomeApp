@@ -60,7 +60,7 @@ public class DeleteIntruderImageAsyncTask extends AsyncTask<String, Integer, Dou
         // Create new HttpClient and HTTPPOST
 
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://128.83.52.253:8079/imagetest.py/deleteImage");     //this is the url of our post servlet for our web application
+        HttpPost httppost = new HttpPost("http://146.6.65.98:8080/imagetest.py/deleteImage");     //this is the url of our post servlet for our web application
         try {
             response = httpclient.execute(httppost);
         } catch (ClientProtocolException e) {

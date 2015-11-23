@@ -178,7 +178,7 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
         public String postData(String valueIWantToSend) {
             // Create new HttpClient and HTTPPOST
             try {
-                    InputStream in = new URL("http://128.83.52.253:8079/imagetest.py/showImage").openStream();
+                    InputStream in = new URL("http://146.6.65.98:8080/imagetest.py/showImage").openStream();
                     bmp = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
                 Log.e(null, "caught exception something went wrong, this should not happen since we were guaranteed the image was there");
