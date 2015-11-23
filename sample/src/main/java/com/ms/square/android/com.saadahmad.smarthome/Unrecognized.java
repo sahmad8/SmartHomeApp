@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -34,14 +35,17 @@ public class Unrecognized extends AppCompatActivity {
     private Bitmap bmp;
     private boolean recieved=false;
     private ImageView imageView;
+    private MediaPlayer mp3;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unrecognized);
         imageView=(ImageView) findViewById(R.id.imageUnrecognized);
+        mp3=MediaPlayer.create(this.getBaseContext(), R.raw.intruder);
         Vibrator v = (Vibrator) this.getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         v.vibrate(2000);
+        mp3.start();
         Toast.makeText(getBaseContext(), "Unrecognized person at your door", Toast.LENGTH_LONG);
         Intent intent = getIntent();
         lockOn=intent.getExtras().getBoolean("lock");

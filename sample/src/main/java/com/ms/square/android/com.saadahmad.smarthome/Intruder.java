@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -54,10 +55,12 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
     private boolean lockOn;
     private boolean faceRecon;
     private JSONObject nestData;
+    private MediaPlayer mp3;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mp3=MediaPlayer.create(this.getBaseContext(), R.raw.alert);
        Vibrator v = (Vibrator) this.getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         v.vibrate(2000);
@@ -73,6 +76,8 @@ public class Intruder extends AppCompatActivity implements View.OnClickListener 
         {
 
         }
+        mp3.seekTo(7000);
+        mp3.start();
         value = (EditText) findViewById(R.id.editText1);
         //btn = (Button) findViewById(R.id.button2);
         imageView = (ImageView) findViewById(R.id.imageSwitcher);
