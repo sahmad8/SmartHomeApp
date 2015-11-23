@@ -120,26 +120,54 @@ public class MainActivity extends AppCompatActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+
+        TextView thermoText = (TextView) findViewById(R.id.thermoText);
+
+        TextView lockText = (TextView) findViewById(R.id.lockText);
+        TextView awayText = (TextView) findViewById(R.id.awayText);
+        TextView reconText = (TextView) findViewById(R.id.reconText);
+
+
         StringBuilder display = new StringBuilder();
         try {
             nestData = new JSONObject(intent.getStringExtra("nestData"));
-            display.append("Current Temperature: ");
+            display.append("::Current Temperature: ");
             double temp = Double.parseDouble(nestData.getString("temperature"));
             String result = String.format("%.1f", temp);
             display.append(result + "\n");
-            display.append("Target Temperature: ");
+            display.append("::Target Temperature: ");
             temp = Double.parseDouble(nestData.getString("target"));
             result = String.format("%.1f", temp);
             display.append(result + "\n");
-            display.append("Away status: "+nestData.getString("away"));
-            display.append("\n");
-            display.append("Lock status: "+ lockOn);
+            thermoText.setText(display.toString());
+
+
+            String text = "";
+            if(lockOn){
+                text = "Locked";
+            }
+            else{
+                text = "Unlocked";
+            }
+
+            awayText.setText("::Away status: "+nestData.getString("away"));
+            lockText.setText("::Lock status: "+ text);
+            if(faceRecon){
+                text = "Activated";
+            }
+            else{
+                text = "Disabled";
+            }
+            reconText.setText("::Face Recon: "+ text);
+
+
             away_mode=nestData.getBoolean("away");
         }catch (JSONException e) {
             e.printStackTrace();
         }
-        TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
-        dataDisplay.setText(display.toString());
+//        TextView dataDisplay = (TextView) findViewById(R.id.dataDisplay);
+//        dataDisplay.setText(display.toString());
         if (away_mode || faceRecon) {
             if (away_mode)
             {

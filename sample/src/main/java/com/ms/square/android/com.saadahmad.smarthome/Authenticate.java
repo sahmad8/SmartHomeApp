@@ -57,6 +57,7 @@ public class Authenticate extends ActionBarActivity implements View.OnClickListe
     private ProgressBar pb;
     HttpResponse response;
     public String myresult=null;
+    //public String myresult="{\"target_temperatue\";\"76\"}";
     private ImageView imageView;
     private Bitmap bmp=null;
     private boolean lockOn;

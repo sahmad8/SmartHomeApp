@@ -26,29 +26,79 @@
     <FrameLayout
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"    >
-    <TextView
-        android:id="@+id/dataDisplay"
-        android:textSize="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:textAppearance="@style/CodeFont"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="46dp" />
+    <!--<TextView-->
+        <!--android:id="@+id/dataDisplay"-->
+        <!--android:textSize="20dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:textAppearance="@style/CodeFont"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="46dp" />-->
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="200dp"
-            android:layout_marginLeft="40dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="20dp"
             android:src="@drawable/nest_cools"
             />
+        <TextView
+            android:id="@+id/thermoText"
+            android:textSize="20dp"
+            android:text=":: Current Temperature: 78 \n:: Target Temperature: 79"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/CodeFont"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="70dp" />
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="240dp"
-            android:layout_marginLeft="40dp"
+            android:layout_marginTop="105dp"
+            android:layout_marginLeft="20dp"
             android:src="@drawable/lock"
             />
+        <TextView
+            android:id="@+id/lockText"
+            android:textSize="20dp"
+            android:text=":: Lock Status: Unlocked"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/CodeFont"
+            android:layout_marginTop="110dp"
+            android:layout_marginLeft="70dp" />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="155dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/awayclear"
+            />
+        <TextView
+            android:id="@+id/awayText"
+            android:textSize="20dp"
+            android:text=":: Away Status: Home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/CodeFont"
+            android:layout_marginTop="160dp"
+            android:layout_marginLeft="70dp" />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="205dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/face_recon"
+            />
+        <TextView
+            android:id="@+id/reconText"
+            android:textSize="20dp"
+            android:text=":: Face Recon: Activated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/CodeFont"
+            android:layout_marginTop="210dp"
+            android:layout_marginLeft="70dp" />
 
     </FrameLayout>
     <!-- android:layout_gravity="start" tells DrawerLayout to treat
